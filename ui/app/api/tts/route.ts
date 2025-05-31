@@ -43,6 +43,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+import { BlobServiceClient } from "@azure/storage-blob";
 
 const DIA_MODEL_DEFAULT = "nari-labs/Dia-1.6B";
 const ELEVEN_MODEL_DEFAULT = "eleven_multilingual_v2";
@@ -56,6 +57,20 @@ const FORMAT_MAP: Record<string, string> = {
   opus: "opus_48k_128",
   pcm: "pcm_24000",
 };
+
+const AZ_CONN = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const AZ_CONTAINER = process.env.AZURE_CONTAINER_NAME;
+
+async function uploadAudioToAzure(buffer: Buffer, filename: string, mime: string) {
+  if (!AZ_CONN || !AZ_CONTAINER) return null; // silently skip if not configured
+  const svc = BlobServiceClient.fromConnectionString(AZ_CONN);
+  const container = svc.getContainerClient(AZ_CONTAINER);
+  const blob = container.getBlockBlobClient(filename);
+  await blob.uploadData(buffer, {
+    blobHTTPHeaders: { blobContentType: mime },
+  });
+  return blob.url;
+}
 
 function tidy(input: string): string {
   return input
@@ -118,11 +133,11 @@ export async function POST(req: NextRequest) {
       // // For ElevenLabs, add emotional voice settings:
       ...(provider === "eleven" && {
         voiceSettings: {
-          stability: 0.3,          // lower → more variation/emotion
+          stability: 0.2,          // lower → more variation/emotion
           similarityBoost: 0.6,    // lower → less strict matching, more expressiveness
           style: 0.8,              // higher → more dramatic/intense tone
           useSpeakerBoost: false,  // false → freer emotional modulation
-          speed: 0.9,              // slightly slower for emotion
+          speed: 0.8,              // slightly slower for emotion
         },
       }),
     };
@@ -142,11 +157,13 @@ export async function POST(req: NextRequest) {
     //   speed: 0.5,              // slightly slower for emotion
     // };
 
-    // Stream audio directly
-    const audioStream = await client.textToSpeech.convert(
-      voiceId,
-      opts,
-    );
+    // ---- Fetch audio as Buffer so we can also upload to Azure -------------
+    const audioStream = await client.textToSpeech.convert(voiceId, opts);
+    const chunks: Buffer[] = [];
+    for await (const chunk of audioStream) {
+      chunks.push(Buffer.from(chunk));
+    }
+    const buffer = Buffer.concat(chunks);
 
     const mime =
       resolvedFormat.startsWith("mp3")
@@ -157,10 +174,17 @@ export async function POST(req: NextRequest) {
         ? "audio/wave"
         : `audio/${resolvedFormat.split("_")[0]}`;
 
-    return new NextResponse(audioStream as any, {
-      status: 200,
-      headers: { "Content-Type": mime },
-    });
+    // Upload to Azure (silently ignore if creds missing)
+    const fileExt = mime.split("/")[1] || "bin";
+    const blobName = `tts-${Date.now()}.${fileExt}`;
+    const blobUrl = await uploadAudioToAzure(buffer, blobName, mime);
+    console.log(blobUrl ? `Uploaded to Azure: ${blobUrl}` : "Azure upload skipped");
+
+    // Return only the blob URL as JSON
+    return NextResponse.json(
+      { url: blobUrl || null },
+      { status: 200 }
+    );
   } catch (err) {
     console.error("TTS route error:", err);
     return NextResponse.json({ error: "internal server error" }, { status: 500 });

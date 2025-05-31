@@ -58,9 +58,12 @@ export default function TTSTestPage() {
         throw new Error(errJson.error || "TTS generation failed.");
       }
 
-      // response is binary audio
-      const blob = await res.blob();
-      setAudioUrl(URL.createObjectURL(blob));
+      // response is JSON containing { url: "<blobUrl>" }
+      const data = await res.json();
+      if (!data.url) {
+        throw new Error("No URL returned from server.");
+      }
+      setAudioUrl(data.url);
     } catch (e: any) {
       setError(e.message || "Network error");
     } finally {
@@ -169,6 +172,11 @@ export default function TTSTestPage() {
         <div style={{ marginTop: 24 }}>
           <h2>▶️ Playback</h2>
           <audio controls src={audioUrl} />
+          <p style={{ marginTop: 8 }}>
+            <a href={audioUrl} color="blue" target="_blank" rel="noopener noreferrer">
+              {audioUrl}
+            </a>
+          </p>
         </div>
       )}
     </main>
