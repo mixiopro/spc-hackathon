@@ -41,7 +41,7 @@ export default function RootLayout({
         className={`${fontSans.variable} ${fontHeading.variable} antialiased`}
         style={
           {
-            "--copilot-kit-primary-color": "var(--primary)",
+            // "--copilot-kit-primary-color": "var(--primary)",
           } as CopilotKitCSSProperties
         }
       >

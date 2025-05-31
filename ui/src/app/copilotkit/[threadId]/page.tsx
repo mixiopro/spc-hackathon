@@ -92,7 +92,7 @@ function YourMainContent({ themeColor }: { themeColor: string }) {
     <div className="h-screen">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         {/* <SidebarTrigger className="cursor-pointer" /> */}
-        <Separator orientation="vertical" className="mr-2 h-4" />
+        {/* <Separator orientation="vertical" className="mr-2 h-4" /> */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Content Planner</h1>
           <Breadcrumb>
@@ -113,7 +113,7 @@ function YourMainContent({ themeColor }: { themeColor: string }) {
       <div
         // This div centers the content block below the header.
         // Added flex-col, items-center for centering, overflow-y-auto for scrolling, and padding.
-        className="h-[calc(100vh-70px)] w-full flex flex-col items-center overflow-y-auto p-4 sm:p-6 md:p-8 transition-colors duration-300"
+        // className="h-[calc(100vh-70px)] w-full flex flex-col items-center overflow-y-auto p-4 sm:p-6 md:p-8 transition-colors duration-300"
       >
         <div
           // This is the main content block, styled to be white with shadow and rounded corners.
@@ -121,7 +121,6 @@ function YourMainContent({ themeColor }: { themeColor: string }) {
           // Removed bg-white and shadow-xl, reduced padding from p-6 sm:p-8 to p-4.
           className="rounded-2xl w-full max-w-7xl"
         >
-          {/* Title and Subtitle Section */}
 
           <PlaygroundRenderer />
         </div>
