@@ -11,11 +11,11 @@ export default function Main() {
   const { state, setState } = useCoAgent<AgentState>({
     name: agent,
     initialState: {
-      model,
-      research_question: "",
-      resources: [],
-      report: "",
-      logs: [],
+      assets: [],
+      prompt: "",
+      starterCode: "",
+      plannerResult: {},
+      finalResult: {},
     },
   });
 
@@ -37,7 +37,7 @@ export default function Main() {
           {/* <ResearchCanvas /> */}
         <PlaygroundRenderer />
         </div>
-        {/* <div
+        <div
           className="w-[500px] h-full flex-shrink-0"
           style={
             {
@@ -53,15 +53,19 @@ export default function Main() {
           <CopilotChat
             className="h-full"
             onSubmitMessage={async (message) => {
-              // clear the logs before starting the new research
-              setState({ ...state, logs: [] });
+              // Reset the state before starting new research
+              setState({
+                ...state,
+                plannerResult: {},
+                finalResult: {},
+              });
               await new Promise((resolve) => setTimeout(resolve, 30));
             }}
             labels={{
               initial: "Hi! How can I assist you with your research today?",
             }}
           />
-        </div> */}
+        </div>
       </div>
     </>
   );

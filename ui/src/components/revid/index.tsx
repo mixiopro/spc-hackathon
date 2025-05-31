@@ -33,6 +33,8 @@ const defaultParams = {
 }
 
 export default function PlaygroundRenderer() {
+
+  
   // Remove code state, LiveProvider manages it internally via context
   // const [code, setCode] = useState(defaultCode);
   const [liveParams, setLiveParams] = useState<Record<string, any>>(defaultParams)
