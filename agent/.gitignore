@@ -9,4 +9,4 @@ sample_agent.egg-info
 .langgraph_api
 .langgraph_checkpoint*
 
-# *.egg-info
+*.egg-info
