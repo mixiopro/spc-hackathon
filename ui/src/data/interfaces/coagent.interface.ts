@@ -38,10 +38,10 @@ export type OriginalAgentState = {
  */
 export interface ReVideoAgentState {
   assets: Asset[];
-  starter_code?: string;
+  starterCode?: string;
   prompt: string;
-  planner_result: Record<string, any>;
-  final_result?: {
+  plannerResult: Record<string, any>;
+  finalResult?: {
     code? : string
   };
 }

@@ -6,6 +6,9 @@ import { useState } from 'react'
 import { Card } from '../ui/card'
 import { LiveEditor, LiveError, LivePreview, LiveProvider, LiveRun } from './playground'
 import { ParameterEditor } from '../ui/parameter-editor'
+import { AgentState } from '../../lib/types'
+import { useCoAgent } from '@copilotkit/react-core'
+import { result } from './result'
 
 // Default code for the playground
 const defaultCode = `
@@ -33,6 +36,15 @@ const defaultParams = {
 }
 
 export default function PlaygroundRenderer() {
+// const [code, setCode] = useCopilst // Initial code state
+  const { state } = useCoAgent<AgentState>({name:"sample_agent"});  
+
+  console.log('🚀 -----------------🚀')
+  console.log('🚀 ~PlaygroundRenderer state:', state)
+  console.log('🚀 ~PlaygroundRenderer code :', state.final_result?.code )
+  console.log('🚀 -----------------🚀')
+
+
   // Remove code state, LiveProvider manages it internally via context
   // const [code, setCode] = useState(defaultCode);
   const [liveParams, setLiveParams] = useState<Record<string, any>>(defaultParams)
@@ -46,9 +58,11 @@ export default function PlaygroundRenderer() {
     setLiveParams(newParams) // Update the state used by LiveProvider
   }
 
+  
   return (
     <LiveProvider
-      code={defaultCode} // Pass initial code directly
+      code={state.final_result?.code 
+        || ''}// {(state.finalResult?.code) || ''} // Pass initial code directly
       autoCompile={true} // Auto-compile on code change
       // globals={{
       //   WIDTH: width,

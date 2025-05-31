@@ -1,21 +1,17 @@
-import { ResearchCanvas } from "@/components/ResearchCanvas";
-import { useModelSelectorContext } from "@/lib/model-selector-provider";
 import { AgentState } from "@/lib/types";
 import { useCoAgent } from "@copilotkit/react-core";
-import { CopilotChat } from "@copilotkit/react-ui";
-import { useCopilotChatSuggestions } from "@copilotkit/react-ui";
+import { CopilotChat, useCopilotChatSuggestions } from "@copilotkit/react-ui";
 import PlaygroundRenderer from "../components/revid";
+import { initialState } from "../constants/initial.state";
 
 export default function Main() {
-  const { model, agent } = useModelSelectorContext();
   const { state, setState } = useCoAgent<AgentState>({
-    name: agent,
+    name: "sample_agent",
     initialState: {
-      model,
-      research_question: "",
-      resources: [],
-      report: "",
-      logs: [],
+      starterCode: "",
+      plannerResult: {},
+      finalResult: {},
+      ...initialState
     },
   });
 
@@ -37,7 +33,7 @@ export default function Main() {
           {/* <ResearchCanvas /> */}
         <PlaygroundRenderer />
         </div>
-        {/* <div
+        <div
           className="w-[500px] h-full flex-shrink-0"
           style={
             {
@@ -53,15 +49,31 @@ export default function Main() {
           <CopilotChat
             className="h-full"
             onSubmitMessage={async (message) => {
-              // clear the logs before starting the new research
-              setState({ ...state, logs: [] });
+
+              console.log('🚀 ---------------------🚀')
+              console.log('🚀 ~CopilotChat message:', message )
+              console.log('🚀 ~CopilotChat state:', {
+                ...state,
+                prompt : message,
+                plannerResult: {},
+                finalResult: {},
+              })
+              console.log('🚀 ---------------------🚀')
+
+              // Reset the state before starting new research
+              setState({
+                ...state,
+                prompt : message,
+                planner_result: {},
+                final_result: {},
+              });
               await new Promise((resolve) => setTimeout(resolve, 30));
             }}
             labels={{
               initial: "Hi! How can I assist you with your research today?",
             }}
           />
-        </div> */}
+        </div>
       </div>
     </>
   );
