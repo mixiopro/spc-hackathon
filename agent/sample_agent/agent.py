@@ -56,28 +56,28 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     Node to generate a plan for video editing based on assets, template, and prompt.
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
     """
-    assets_dict = {str(i): asset for i, asset in enumerate(state.assets)}
+    assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
     messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"])
 
     # Add each asset as a HumanMessage with appropriate content
-    for i, asset in enumerate(state.assets):
-        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
-        if asset.type == "image":
-            asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
-        elif asset.type in ("audio", "video"):
+    for i, asset in enumerate(state["assets"]):
+        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset['type']}): {asset['description']}"}]
+        if asset["type"] == "image":
+            asset_msg.append({"type": "image_url", "image_url": asset["gsUri"]})
+        elif asset["type"] in ("audio", "video"):
             # Assume gsUri is a direct https URL to the file
-            mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
+            mime = "audio/mpeg" if asset["type"] == "audio" else "video/mp4"
             try:
-                data = await fetch_and_base64(asset.gsUri)
+                data = await fetch_and_base64(asset["gsUri"])
                 asset_msg.append({"type": "media", "data": data, "mime_type": mime})
             except Exception as e:
-                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
+                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset['type']} at {asset['gsUri']}: {e}]"})
         messages.append(HumanMessage(content=asset_msg))
 
     # Add template and goal as final HumanMessage
     messages.append(HumanMessage(content=[
-        {"type": "text", "text": f"## Template:\n{state.starter_code}"},
-        {"type": "text", "text": f"## Goal:\n{state.prompt}"}
+        {"type": "text", "text": f"## Template:\n{state['starter_code']}"},
+        {"type": "text", "text": f"## Goal:\n{state['prompt']}"}
     ]))
 
     model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-preview-05-20", temperature=0.1)
@@ -95,15 +95,18 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
     """
     Node to call the ReVideo generation service with the plan and assets.
     """
-    plan = state.planner_result.get("plan", "")
-    numbered_assets = state.planner_result.get("numbered_assets", {})
+    plan = state["planner_result"].get("plan", "")
+    numbered_assets = state["planner_result"].get("numbered_assets", {})
     payload = {
         "plan": plan,
-        "template_code": state.starter_code,
-        "description": state.prompt,
+        "template_code": state["starter_code"],
+        "description": state["prompt"],
         "assets": numbered_assets,
+        "variables": {},
+        "settings": {}
     }
-    async with httpx.AsyncClient(timeout=60.0) as client:
+    # print(payload)
+    async with httpx.AsyncClient(timeout=360.0) as client:
         response = await client.post(REVIDEO_GENERATE_ENDPOINT, json=payload)
         response.raise_for_status()
         result = response.json()
