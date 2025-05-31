@@ -1,5 +1,4 @@
 import { CopilotKit } from "@copilotkit/react-core";
-import { CopilotKitCSSProperties } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
@@ -39,11 +38,6 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${fontSans.variable} ${fontHeading.variable} antialiased`}
-        style={
-          {
-            // "--copilot-kit-primary-color": "var(--primary)",
-          } as CopilotKitCSSProperties
-        }
       >
         <CopilotKit
           runtimeUrl={runtimeUrl}

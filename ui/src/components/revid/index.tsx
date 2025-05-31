@@ -3,12 +3,11 @@
 import { Code } from 'lucide-react'
 import { useState } from 'react'
 // import { AspectRatio } from '../ui/aspect-ratio'
-import { Card } from '../ui/card'
-import { LiveEditor, LiveError, LivePreview, LiveProvider, LiveRun } from './playground'
-import { ParameterEditor } from '../ui/parameter-editor'
-import { AgentState } from '../../lib/types'
 import { useCoAgent } from '@copilotkit/react-core'
-import { result } from './result'
+import { AgentState } from '../../lib/types'
+import { Card } from '../ui/card'
+import { ParameterEditor } from '../ui/parameter-editor'
+import { LiveEditor, LiveError, LivePreview, LiveProvider, LiveRun } from './playground'
 
 // Default code for the playground
 const defaultCode = `
@@ -41,7 +40,6 @@ export default function PlaygroundRenderer() {
 
   console.log('🚀 -----------------🚀')
   console.log('🚀 ~PlaygroundRenderer state:', state)
-  console.log('🚀 ~PlaygroundRenderer code :', state.final_result?.code )
   console.log('🚀 -----------------🚀')
 
 
@@ -61,14 +59,13 @@ export default function PlaygroundRenderer() {
   
   return (
     <LiveProvider
-      code={state.final_result?.code 
-        || ''}// {(state.finalResult?.code) || ''} // Pass initial code directly
+      code={state.final_result?.code || ''}
       autoCompile={true} // Auto-compile on code change
-      // globals={{
-      //   WIDTH: width,
-      //   ASPECT_RATIO: aspectRatio,
-      //   // Add any other simple globals if needed
-      // }}
+      globals={{
+        WIDTH: width,
+        ASPECT_RATIO: aspectRatio,
+        // Add any other simple globals if needed
+      }}
       parameters={liveParams} // Use the state updated by ParameterEditor
       width={width}
       aspectRatio={aspectRatio}
