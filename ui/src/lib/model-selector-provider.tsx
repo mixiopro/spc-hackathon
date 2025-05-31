@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 type ModelSelectorContextType = {
   model: string;
@@ -39,18 +38,18 @@ export const ModelSelectorProvider = ({
       ? null
       : new URL(window.location.href).searchParams.get("lgcDeploymentUrl");
 
-  let agent = "research_agent";
-  if (model === "google_genai") {
-    agent = "research_agent_google_genai";
-  } else if (model === "crewai") {
-    agent = "research_agent_crewai";
-  }
+  // let agent = "research_agent";
+  // if (model === "google_genai") {
+  //   agent = "research_agent_google_genai";
+  // } else if (model === "crewai") {
+  //   agent = "research_agent_crewai";
+  // }
 
   return (
     <ModelSelectorContext.Provider
       value={{
         model,
-        agent,
+        agent:'sample_agent',
         lgcDeploymentUrl,
         hidden,
         setModel,
