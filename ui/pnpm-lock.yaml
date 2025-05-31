@@ -83,6 +83,9 @@ importers:
       lucide-react:
         specifier: ^0.511.0
         version: 0.511.0(react@18.3.1)
+      mime-types:
+        specifier: ^3.0.1
+        version: 3.0.1
       next:
         specifier: 14.2.29
         version: 14.2.29(@playwright/test@1.52.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -102,6 +105,9 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
     devDependencies:
+      '@types/mime-types':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@types/node':
         specifier: ^20
         version: 20.17.57
@@ -1399,6 +1405,9 @@ packages:
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
+
+  '@types/mime-types@3.0.0':
+    resolution: {integrity: sha512-9gFWMsVgEtbsD6yY/2z8pAtnZhdRKl4Q9xmKQJy5gv0fMpzJeeWtQyd7WpdhaIbRSwPCfnjXOsNMcoQvu5giGg==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -5252,6 +5261,8 @@ snapshots:
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
+
+  '@types/mime-types@3.0.0': {}
 
   '@types/ms@2.1.0': {}
 

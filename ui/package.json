@@ -34,6 +34,7 @@
     "elevenlabs-js": "^1.2.6",
     "jsx-runtime": "link:@revideo/2d/lib/jsx-runtime",
     "lucide-react": "^0.511.0",
+    "mime-types": "^3.0.1",
     "next": "14.2.29",
     "openai": "^4.62.1",
     "react": "^18",
@@ -42,6 +43,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/mime-types": "^3.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
