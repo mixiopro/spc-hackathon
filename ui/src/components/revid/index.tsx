@@ -8,6 +8,7 @@ import { LiveEditor, LiveError, LivePreview, LiveProvider, LiveRun } from './pla
 import { ParameterEditor } from '../ui/parameter-editor'
 import { AgentState } from '../../lib/types'
 import { useCoAgent } from '@copilotkit/react-core'
+import { result } from './result'
 
 // Default code for the playground
 const defaultCode = `
@@ -57,9 +58,8 @@ export default function PlaygroundRenderer() {
   }
 
   return (
-    state.finalResult && 
     <LiveProvider
-      code={state.starterCode || ''} // Pass initial code directly
+      code={result.code}// {(state.finalResult?.code) || ''} // Pass initial code directly
       autoCompile={true} // Auto-compile on code change
       // globals={{
       //   WIDTH: width,
