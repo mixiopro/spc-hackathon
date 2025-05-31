@@ -4,8 +4,9 @@ It defines the workflow graph, state, tools, nodes and edges.
 """
 
 from typing import List, Dict, Any, Optional, Literal
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+import base64
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, END
 from langgraph.types import Command
@@ -13,6 +14,10 @@ from copilotkit import CopilotKitState
 import httpx
 from .data.asset import Asset
 from .data.base import StarterCode
+import os
+
+if "GOOGLE_API_KEY" not in os.environ:
+    raise ValueError("GOOGLE_API_KEY environment variable is not set")
 
 # --- ReVideo Agent Constants ---
 DEFAULT_PLANNER_SYSTEM_PROMPT = """
@@ -27,7 +32,7 @@ Instructions:
 6. Ensure the plan aligns with the template's original purpose and structure where possible, unless the assets clearly necessitate a different approach.
 7. Output *only* the plan as a plain text string. Do not include greetings, explanations, or code snippets in the final plan output.
 """
-REVIDEO_GENERATE_ENDPOINT = "http://localhost:8000/revideo/generate"
+REVIDEO_GENERATE_ENDPOINT = "https://aider.mixio.pro/revideo/generate"
 
 class AgentState(CopilotKitState):
     """
@@ -40,29 +45,49 @@ class AgentState(CopilotKitState):
     planner_result: Dict[str, Any] = {}
     final_result: Dict[str, Any] = {}
 
+async def fetch_and_base64(url: str) -> str:
+    import httpx
+    async with httpx.AsyncClient() as client:
+        r = await client.get(url)
+        r.raise_for_status()
+        return base64.b64encode(r.content).decode()
+
 async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Literal["coder_node"]]:
     """
     Node to generate a plan for video editing based on assets, template, and prompt.
-    Passes full chat history for context.
+    Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
     """
-    # Number assets
     assets_dict = {str(i): asset for i, asset in enumerate(state.assets)}
-    assets_str = "\n".join(f"{i}: {a}" for i, a in assets_dict.items())
-    template_str = f"Code: ```tsx\n{state.starter_code}\n```"
-    # Build planner prompt as a HumanMessage
-    planner_human = HumanMessage(
-        content=f"## Assets:\n{assets_str}\n\n## Template:\n{template_str}\n\n## Goal:\n{state.prompt}"
-    )
-    # Compose messages: system prompt, chat history, new planner prompt
-    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"]) + [planner_human]
-    model = ChatOpenAI(model="gpt-4o")
+    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"])
+
+    # Add each asset as a HumanMessage with appropriate content
+    for i, asset in enumerate(state.assets):
+        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
+        if asset.type == "image":
+            asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
+        elif asset.type in ("audio", "video"):
+            # Assume gsUri is a direct https URL to the file
+            mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
+            try:
+                data = await fetch_and_base64(asset.gsUri)
+                asset_msg.append({"type": "media", "data": data, "mime_type": mime})
+            except Exception as e:
+                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
+        messages.append(HumanMessage(content=asset_msg))
+
+    # Add template and goal as final HumanMessage
+    messages.append(HumanMessage(content=[
+        {"type": "text", "text": f"## Template:\n{state.starter_code}"},
+        {"type": "text", "text": f"## Goal:\n{state.prompt}"}
+    ]))
+
+    model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-preview-05-20", temperature=0.1)
     response = await model.ainvoke(messages, config)
     plan = getattr(response, "content", str(response))
     return Command(
         goto="coder_node",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
-            # Optionally, append the LLM's output to chat history
             "messages": state["messages"] + [response]
         }
     )
