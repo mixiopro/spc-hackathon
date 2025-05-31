@@ -5,7 +5,7 @@ It defines the workflow graph, state, tools, nodes and edges.
 
 from typing import List, Dict, Any, Optional, Literal
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 import base64
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, END
@@ -13,7 +13,6 @@ from langgraph.types import Command
 from copilotkit import CopilotKitState
 import httpx
 from .data.asset import Asset
-from .data.base import StarterCode
 import os
 
 if "GOOGLE_API_KEY" not in os.environ:
