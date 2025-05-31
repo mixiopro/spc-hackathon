@@ -25,9 +25,9 @@ const fontHeading = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Meal Pro Planner",
+  title: "Mixio Pro Planner",
   description:
-    "Meal Pro Planner: An Open Source Icon Alternative for generations of Content Plan, Competitor Analysis, and more.",
+    "Mixio Pro Planner: An Open Source Icon Alternative for generations of Content Plan, Competitor Analysis, and more.",
 };
 
 export default function RootLayout({
