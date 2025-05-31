@@ -12,7 +12,7 @@ from langgraph.graph import StateGraph, END
 from langgraph.types import Command
 from copilotkit import CopilotKitState
 import httpx
-from .data.asset import Asset
+from sample_agent.data.asset import Asset
 import os
 
 if "GOOGLE_API_KEY" not in os.environ:
