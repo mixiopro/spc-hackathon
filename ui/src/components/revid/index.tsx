@@ -41,6 +41,7 @@ export default function PlaygroundRenderer() {
 
   console.log('🚀 -----------------🚀')
   console.log('🚀 ~PlaygroundRenderer state:', state)
+  console.log('🚀 ~PlaygroundRenderer code :', state.final_result?.code )
   console.log('🚀 -----------------🚀')
 
 
@@ -57,9 +58,11 @@ export default function PlaygroundRenderer() {
     setLiveParams(newParams) // Update the state used by LiveProvider
   }
 
+  
   return (
     <LiveProvider
-      code={result.code}// {(state.finalResult?.code) || ''} // Pass initial code directly
+      code={state.final_result?.code 
+        || ''}// {(state.finalResult?.code) || ''} // Pass initial code directly
       autoCompile={true} // Auto-compile on code change
       // globals={{
       //   WIDTH: width,

@@ -64,8 +64,8 @@ export default function Main() {
               setState({
                 ...state,
                 prompt : message,
-                plannerResult: {},
-                finalResult: {},
+                planner_result: {},
+                final_result: {},
               });
               await new Promise((resolve) => setTimeout(resolve, 30));
             }}
