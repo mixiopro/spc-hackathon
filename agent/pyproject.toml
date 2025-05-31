@@ -19,6 +19,7 @@ dependencies = [
     "python-dotenv",
     "langchain-core",
     "langgraph-cli[inmem]",
+    "langchain-google-genai>=2.1.5",
 ]
 
 [build-system]
