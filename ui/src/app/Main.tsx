@@ -11,7 +11,7 @@ export default function Main() {
       starterCode: "",
       plannerResult: {},
       finalResult: {},
-      ...initialState
+      ...initialState,
     },
   });
 
@@ -22,7 +22,7 @@ export default function Main() {
   return (
     <>
       <h1 className="flex h-[60px] bg-[#0E103D] text-white items-center px-10 text-2xl font-medium">
-        Research Helper 
+        Research Helper
       </h1>
 
       <div
@@ -31,7 +31,7 @@ export default function Main() {
       >
         <div className="flex-1 overflow-hidden">
           {/* <ResearchCanvas /> */}
-        <PlaygroundRenderer />
+          <PlaygroundRenderer />
         </div>
         <div
           className="w-[500px] h-full flex-shrink-0"
@@ -49,21 +49,20 @@ export default function Main() {
           <CopilotChat
             className="h-full"
             onSubmitMessage={async (message) => {
-
-              console.log('🚀 ---------------------🚀')
-              console.log('🚀 ~CopilotChat message:', message )
-              console.log('🚀 ~CopilotChat state:', {
+              console.log("🚀 ---------------------🚀");
+              console.log("🚀 ~CopilotChat message:", message);
+              console.log("🚀 ~CopilotChat state:", {
                 ...state,
-                prompt : message,
+                prompt: message,
                 plannerResult: {},
                 finalResult: {},
-              })
-              console.log('🚀 ---------------------🚀')
+              });
+              console.log("🚀 ---------------------🚀");
 
               // Reset the state before starting new research
               setState({
                 ...state,
-                prompt : message,
+                prompt: message,
                 planner_result: {},
                 final_result: {},
               });
