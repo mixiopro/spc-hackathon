@@ -30,6 +30,7 @@ function Home() {
 
   return (
     <CopilotKit runtimeUrl={runtimeUrl} showDevConsole={false} agent={agent}>
+      
       <Main />
     </CopilotKit>
   );

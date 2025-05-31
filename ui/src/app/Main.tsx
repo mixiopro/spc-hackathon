@@ -4,6 +4,7 @@ import { AgentState } from "@/lib/types";
 import { useCoAgent } from "@copilotkit/react-core";
 import { CopilotChat } from "@copilotkit/react-ui";
 import { useCopilotChatSuggestions } from "@copilotkit/react-ui";
+import PlaygroundRenderer from "../components/revid";
 
 export default function Main() {
   const { model, agent } = useModelSelectorContext();
@@ -25,7 +26,7 @@ export default function Main() {
   return (
     <>
       <h1 className="flex h-[60px] bg-[#0E103D] text-white items-center px-10 text-2xl font-medium">
-        Research Helper
+        Research Helper 
       </h1>
 
       <div
@@ -33,9 +34,10 @@ export default function Main() {
         style={{ height: "calc(100vh - 60px)" }}
       >
         <div className="flex-1 overflow-hidden">
-          <ResearchCanvas />
+          {/* <ResearchCanvas /> */}
+        <PlaygroundRenderer />
         </div>
-        <div
+        {/* <div
           className="w-[500px] h-full flex-shrink-0"
           style={
             {
@@ -59,7 +61,7 @@ export default function Main() {
               initial: "Hi! How can I assist you with your research today?",
             }}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );
