@@ -38,10 +38,10 @@ class AgentState(CopilotKitState):
     Agent state for the ReVideo LangGraph agent.
     Inherits chat history (messages) from CopilotKitState.
     """
-    assets: List[Asset]
+    assets: List[Asset] 
     starter_code: Optional[str]
     prompt: str
-    planner_result: Dict[str, Any]
+    planner_result: Dict[str, Any] 
     final_result: Dict[str, Any]
 
 async def fetch_and_base64(url: str) -> str:
@@ -57,27 +57,22 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
     """
     assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
-    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
-    state['prompt'] = state['messages'][-1].content
+    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"])
 
     # Add each asset as a HumanMessage with appropriate content
     for i, asset in enumerate(state["assets"]):
-        asset_msg: List[Dict[str, Any]] = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
-        if asset.type == "image":
-            asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
-        elif asset.type in ("audio", "video"):
+        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset['type']}): {asset['description']}"}] # type: ignore
+        if asset["type"] == "image": # type: ignore
+            asset_msg.append({"type": "image_url", "image_url": asset["gsUri"]}) # type: ignore
+        elif asset["type"] in ("audio", "video"): # type: ignore
             # Assume gsUri is a direct https URL to the file
-            mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
+            mime = "audio/mpeg" if asset["type"] == "audio" else "video/mp4" # type: ignore
             try:
-                data = await fetch_and_base64(asset.gsUri)
+                data = await fetch_and_base64(asset["gsUri"]) # type: ignore
                 asset_msg.append({"type": "media", "data": data, "mime_type": mime})
             except Exception as e:
-                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
-            # Explicitly create a list whose elements match the type expected by HumanMessage content list.
-            # HumanMessage content list elements are str | Dict[Any, Any].
-            # Each 'item' in asset_msg is Dict[str, Any], which is assignable to str | Dict[Any, Any].
-            current_asset_content_for_message: List[str | Dict[Any, Any]] = [item for item in asset_msg]
-            messages.append(HumanMessage(content=current_asset_content_for_message))
+                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset['type']} at {asset['gsUri']}: {e}]"}) # type: ignore
+        messages.append(HumanMessage(content=asset_msg)) # type: ignore
 
     # Add template and goal as final HumanMessage
     messages.append(HumanMessage(content=[
@@ -92,8 +87,7 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
         goto="coder_node",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
-            "messages": state["messages"] + [response],
-            "prompt": state['prompt']
+            "messages": state["messages"] + [response]
         }
     )
 
