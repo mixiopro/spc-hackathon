@@ -21,7 +21,7 @@ export const REVIDEO_SWC_CONFIG = {
     },
     target: "es2022",
     loose: true,
-    externalHelpers: true,
+    externalHelpers: false,
     keepClassNames: true,
   },
   module: {
@@ -54,15 +54,15 @@ export async function transform(code: string): Promise<string> {
 
   try {
     const result = swcTransform(code, REVIDEO_SWC_CONFIG);
-    
+
     // Convert CommonJS to ESM
     const esmCode = result.code
-      .replace('exports.default =', 'export default')
+      .replace("exports.default =", "export default")
       .replace(/require\(['"](.*)['"]\)/g, (_, p1) => `import('${p1}')`);
-      
+
     return esmCode;
   } catch (err) {
-    console.error('Failed to transform code:', err);
+    console.error("Failed to transform code:", err);
     throw err;
   }
 }

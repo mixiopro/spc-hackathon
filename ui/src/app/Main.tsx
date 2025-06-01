@@ -34,15 +34,15 @@ export default function Main() {
           <PlaygroundRenderer />
         </div>
         <div
-          className="w-[500px] h-full flex-shrink-0"
+          className="w-[500px] h-full flex-shrink-0 border-l"
           style={
             {
-              "--copilot-kit-background-color": "#E0E9FD",
-              "--copilot-kit-secondary-color": "#6766FC",
-              "--copilot-kit-separator-color": "#b8b8b8",
-              "--copilot-kit-primary-color": "#FFFFFF",
-              "--copilot-kit-contrast-color": "#000000",
-              "--copilot-kit-secondary-contrast-color": "#000",
+              // "--copilot-kit-background-color": "#E0E9FD",
+              // "--copilot-kit-secondary-color": "#6766FC",
+              // "--copilot-kit-separator-color": "#b8b8b8",
+              // "--copilot-kit-primary-color": "#FFFFFF",
+              // "--copilot-kit-contrast-color": "#000000",
+              // "--copilot-kit-secondary-contrast-color": "#000",
             } as any
           }
         >
