@@ -40,8 +40,8 @@ export interface ReVideoAgentState {
   assets: Asset[];
   starterCode?: string;
   prompt: string;
-  plannerResult: Record<string, any>;
-  finalResult?: {
+  planner_result: Record<string, any>;
+  final_result?: {
     code? : string
   };
 }
