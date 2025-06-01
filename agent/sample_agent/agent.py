@@ -55,12 +55,12 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     """
     Node to generate a plan for video editing based on assets, template, and prompt.
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
-    # """
-    # assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
-    # messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
-    # state['prompt'] = state['messages'][-1].content
+    """
+    assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
+    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
+    state['prompt'] = state['messages'][-1].content
 
-    # # Add each asset as a HumanMessage with appropriate content
+    # Add each asset as a HumanMessage with appropriate content
     # for i, asset in enumerate(state["assets"]):
     #     asset_msg: List[Dict[str, Any]] = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
     #     if asset.type == "image":
@@ -107,16 +107,16 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
     """
     Node to call the ReVideo generation service with the plan and assets.
     """
-    # plan = state["planner_result"].get("plan", "")
-    # numbered_assets = state["planner_result"].get("numbered_assets", {})
-    # payload = {
-    #     "plan": plan,
-    #     "template_code": state["starter_code"],
-    #     "description": state["prompt"],
-    #     "assets": numbered_assets,
-    #     "variables": {},
-    #     "settings": {}
-    # }
+    plan = state["planner_result"].get("plan", "")
+    numbered_assets = state["planner_result"].get("numbered_assets", {})
+    payload = {
+        "plan": plan,
+        "template_code": state["starter_code"],
+        "description": state["prompt"],
+        "assets": numbered_assets,
+        "variables": {},
+        "settings": {}
+    }
     # print(payload)
     # Mock final_result: use static value from constants
     # async with httpx.AsyncClient(timeout=360.0) as client:
