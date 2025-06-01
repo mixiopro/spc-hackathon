@@ -60,30 +60,30 @@ const fullResponseSchema = {
           type: Type.STRING,
         },
       },
-      transcripts: {
-        type: Type.ARRAY,
-        description:
-          "Aligned transcript snippets relative to the original media timeline.",
-        items: {
-          type: Type.OBJECT,
-          required: ["text", "start", "end"],
-          properties: {
-            text: {
-              type: Type.STRING,
-              description: "Verbatim speech text.",
-            },
-            start: {
-              type: Type.NUMBER,
-              description:
-                "Start timestamp of this transcript chunk in seconds.",
-            },
-            end: {
-              type: Type.NUMBER,
-              description: "End timestamp of this transcript chunk in seconds.",
-            },
-          },
-        },
-      },
+      // transcripts: {
+      //   type: Type.ARRAY,
+      //   description:
+      //     "Aligned transcript snippets relative to the original media timeline.",
+      //   items: {
+      //     type: Type.OBJECT,
+      //     required: ["text", "start", "end"],
+      //     properties: {
+      //       text: {
+      //         type: Type.STRING,
+      //         description: "Verbatim speech text.",
+      //       },
+      //       start: {
+      //         type: Type.NUMBER,
+      //         description:
+      //           "Start timestamp of this transcript chunk in seconds.",
+      //       },
+      //       end: {
+      //         type: Type.NUMBER,
+      //         description: "End timestamp of this transcript chunk in seconds.",
+      //       },
+      //     },
+      //   },
+      // },
     },
   },
 };
