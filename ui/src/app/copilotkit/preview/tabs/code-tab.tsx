@@ -1,7 +1,14 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Code } from "lucide-react";
+import { LiveEditor } from "../../../../components/revid/playground";
 
 export default function CodeTab() {
   return (
@@ -17,17 +24,7 @@ export default function CodeTab() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md bg-muted/50 border border-border h-[400px] p-4 font-mono text-sm overflow-auto">
-            <pre className="text-muted-foreground">
-              {`// Code related to the selected asset will appear here
-// Select an asset from the sidebar to view its code
-
-function renderAsset(asset) {
-  // Implementation will be added later
-  return asset;
-}`}
-            </pre>
-          </div>
+          <LiveEditor className="w-full h-full font-mono text-sm" />
         </CardContent>
       </Card>
     </div>
