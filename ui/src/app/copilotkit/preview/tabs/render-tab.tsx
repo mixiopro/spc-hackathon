@@ -1,9 +1,25 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Eye } from "lucide-react";
+import {
+  LiveError,
+  LivePreview,
+} from "../../../../components/revid/playground";
 
-export default function RenderTab() {
+export default function RenderTab({
+  liveParams,
+}: {
+  liveParams: Record<string, any>;
+}) {
+  const aspectRatio = 16 / 9;
+  const width = 480;
   return (
     <div className="space-y-4 p-1">
       <Card className="bg-card/50 backdrop-blur-sm border-muted">
@@ -17,9 +33,14 @@ export default function RenderTab() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md bg-muted/50 border border-border h-[400px] flex items-center justify-center">
-            <p className="text-muted-foreground">Selected asset will render here</p>
+          <div className="absolute inset-0">
+            <LivePreview
+              width={width}
+              height={width / aspectRatio}
+              variables={liveParams}
+            />
           </div>
+          <LiveError className="absolute bottom-0 left-0 right-0 text-red-500 p-2" />
         </CardContent>
       </Card>
     </div>
