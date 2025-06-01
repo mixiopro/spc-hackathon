@@ -77,7 +77,7 @@ export function LivePreview({
   console.log('🚀 ~ compiled parameters:', variables)
 
   return (
-    <div className={cn('w-full rounded-lg object-contain bg-background !aspect-video', className)}>
+    <div className={cn('!aspect-video', className)}>
       {code && compiled ? (
         <Player
           controls={showControls}
