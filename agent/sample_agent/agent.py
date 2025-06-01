@@ -57,7 +57,8 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
     """
     assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
-    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"])
+    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
+    state['prompt'] = state['messages'][-1].content
 
     # Add each asset as a HumanMessage with appropriate content
     for i, asset in enumerate(state["assets"]):
@@ -87,7 +88,8 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
         goto="coder_node",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
-            "messages": state["messages"] + [response]
+            "messages": state["messages"] + [response],
+            "prompt": state['prompt']
         }
     )
 
