@@ -1,12 +1,12 @@
 "use client";
 
+import { defaultConfig, DemoConfig, DemoConfigEditor } from "@/components/configEditor/DemoConfigEditor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
 import { useCoAgent } from "@copilotkit/react-core";
 import { Code, FileText, Monitor, ScrollText } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { DemoConfig, defaultConfig, DemoConfigEditor } from "@/components/configEditor/DemoConfigEditor";
-import { toast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import CodeTab from "../../app/copilotkit/preview/tabs/code-tab";
 import PlanTab from "../../app/copilotkit/preview/tabs/plan-tab";
 import RenderTab from "../../app/copilotkit/preview/tabs/render-tab";
@@ -22,6 +22,11 @@ export default function MainContent() {
 
   // Initialize state with full config
   const [formState, setFormState] = useState<DemoConfig>(defaultConfig);
+
+  console.log('🚀 -------------------------🚀')
+  console.log('🚀 ~ MainContent:formState:', formState)
+  console.log('🚀 -------------------------🚀')
+
 
   // Watch all form changes
   useEffect(() => {
@@ -87,7 +92,7 @@ export default function MainContent() {
               </TabsList>
               <div className="overflow-auto h-[calc(100vh-8rem)] mt-4">
                 <TabsContent value="render">
-                  <RenderTab liveParams={formState} />
+                  <RenderTab liveParams={{config: formState}} />
                 </TabsContent>
                  <TabsContent value="plan">
                   <PlanTab />

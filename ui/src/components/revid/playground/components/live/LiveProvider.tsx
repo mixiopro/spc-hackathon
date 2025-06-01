@@ -20,8 +20,11 @@ export function LiveProvider({
   aspectRatio = 9 / 16,
   globals: initialGlobals = {},
   parameters: initialParameters = {},
-  autoCompile: initialAutoCompile = true,
+  autoCompile: initialAutoCompile = true
+
 }: LiveProviderProps) {
+
+
   // State management
   const [code, setCode] = useState(initialCode)
   const [project, setProject] = useState<Project | null>(null)
@@ -30,6 +33,7 @@ export function LiveProvider({
   const [isCompiling, setIsCompiling] = useState(false)
   const [autoCompile, setAutoCompile] = useState(initialAutoCompile)
   const [parameters, setParameters] = useState<Record<string, ParameterValue>>(initialParameters)
+
   const [globals, setGlobals] = useState<Record<string, any>>(initialGlobals)
 
   const [isPlayerReady, setIsPlayerReady] = useState(false)
