@@ -85,9 +85,15 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
         {"type": "text", "text": f"## Goal:\n{state['prompt']}"}
     ]))
 
-    model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-preview-05-20", temperature=0.1)
-    response = await model.ainvoke(messages, config)
-    plan = getattr(response, "content", str(response))
+    # Mock planner_node: use static plan from constants/plan.md
+    # model = ChatGoogleGenerativeAI(model="gemini-2.5-flash-preview-05-20", temperature=0.1)
+    # response = await model.ainvoke(messages, config)
+    # plan = getattr(response, "content", str(response))
+    plan_path = os.path.join(os.path.dirname(__file__), "constants", "plan.md")
+    with open(plan_path, "r") as f:
+        plan = f.read()
+    response = HumanMessage(content=plan)
+
     return Command(
         goto="coder_node",
         update={
@@ -112,10 +118,13 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
         "settings": {}
     }
     # print(payload)
-    async with httpx.AsyncClient(timeout=360.0) as client:
-        response = await client.post(REVIDEO_GENERATE_ENDPOINT, json=payload)
-        response.raise_for_status()
-        result = response.json()
+    # Mock final_result: use static value from constants
+    # async with httpx.AsyncClient(timeout=360.0) as client:
+    #     response = await client.post(REVIDEO_GENERATE_ENDPOINT, json=payload)
+    #     response.raise_for_status()
+    #     result = response.json()
+    from sample_agent.constants.final_result import final_result as result
+
     return Command(
         goto=END,
         update={
