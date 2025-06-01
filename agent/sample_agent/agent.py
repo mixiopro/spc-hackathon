@@ -51,7 +51,7 @@ async def fetch_and_base64(url: str) -> str:
         r.raise_for_status()
         return base64.b64encode(r.content).decode()
 
-async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Literal["coder_node"]]:
+async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Literal["Video Coder"]]:
     """
     Node to generate a plan for video editing based on assets, template, and prompt.
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
@@ -84,7 +84,7 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     response = await model.ainvoke(messages, config)
     plan = getattr(response, "content", str(response))
     return Command(
-        goto="coder_node",
+        goto="Video Coder",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
             "messages": state["messages"] + [response]
@@ -117,10 +117,70 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
         }
     )
 
+async def asset_generation_node(state: AgentState, config: RunnableConfig) -> Command[Literal["Planner"]]:
+    """
+    Node to generate assets based on the prompt.
+    """
+    return Command(
+        goto="Planner",
+        update={
+            "assets": state["assets"]
+        }
+    )
+
+async def asset_understanding_node(state: AgentState, config: RunnableConfig) -> Command[Literal["Planner"]]:
+    """
+    Node to analyze and understand the provided assets in detail.
+    Extracts metadata, content information, and relationships between assets.
+    """
+    # Process assets to extract detailed information
+    # This would typically involve image analysis, text extraction, etc.
+    
+    return Command(
+        goto="Planner",
+        update={
+            "assets": state["assets"],
+            "asset_analysis": {
+                "metadata": {},  # Asset metadata
+                "content_info": {},  # Content information
+                "relationships": {}  # Relationships between assets
+            }
+        }
+    )
+
+async def deep_research_node(state: AgentState, config: RunnableConfig) -> Command[Literal["Planner"]]:
+    """
+    Node to perform in-depth research related to the prompt and assets.
+    Gathers additional context and information to enhance video generation.
+    """
+    # Perform research based on prompt and assets
+    # This could involve retrieving additional information from external sources
+    
+    return Command(
+        goto="Planner",
+        update={
+            "research_results": {
+                "context": {},  # Additional context
+                "references": {},  # Related references
+                "suggestions": {}  # Suggestions based on research
+            }
+        }
+    )
+
+
 # Define the workflow graph
 workflow = StateGraph(AgentState)
-workflow.add_node("planner_node", planner_node)
-workflow.add_node("coder_node", coder_node)
-workflow.add_edge("planner_node", "coder_node")
-workflow.set_entry_point("planner_node")
+workflow.add_node("Planner", planner_node)
+workflow.add_node("Video Coder", coder_node)
+workflow.add_node("Asset Generation", asset_generation_node)
+workflow.add_node("Asset Understanding", asset_understanding_node)
+workflow.add_node("Deep Research", deep_research_node)
+workflow.add_edge("Planner", "Video Coder")
+workflow.add_edge("Planner", "Asset Generation")
+workflow.add_edge("Asset Generation", "Planner")
+workflow.add_edge("Planner", "Asset Understanding")
+workflow.add_edge("Asset Understanding", "Planner")
+workflow.add_edge("Planner", "Deep Research")
+workflow.add_edge("Deep Research", "Planner")
+workflow.set_entry_point("Planner")
 graph = workflow.compile()
