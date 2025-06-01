@@ -47,10 +47,19 @@ export default function CopilotKitPage({
         defaultOpen={true}
         shortcut="/"
         labels={{
-          title: "Popup Assistant",
+          title: "Video Assistant",
           initial:
-            '👋 Hi, there! You\'re chatting with an agent. This agent comes with a few tools to get you started.\n\nFor example you can try:\n- **Frontend Tools**: "Set the theme to orange"\n- **Shared State**: "Write a proverb about AI"\n- **Generative UI**: "Get the weather in SF"\n\nAs you interact with the agent, you\'ll see the UI update in real-time to reflect the agent\'s **state**, **tool calls**, and **progress**.',
+            `👋 Hey there! You're chatting with your AI-powered video editor. This editor comes with smart tools to help you get started.
+
+Here are a few things you can try:
+
+Visual Styling: “Set the video theme to cinematic”
+
+Smart Edits: “Trim awkward pauses and add background music”
+
+As you interact, you’ll see your timeline and edits update in real-time—showing the editor’s state, actions, and progress as it works with you.`,
         }}
+        
       />
     </section>
   );

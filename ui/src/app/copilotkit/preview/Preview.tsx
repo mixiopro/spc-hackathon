@@ -26,7 +26,7 @@ const tabs = [
   },
   {
     value: "spec",
-    label: "Spec",
+    label: "Parameters",
   },
 ];
 
