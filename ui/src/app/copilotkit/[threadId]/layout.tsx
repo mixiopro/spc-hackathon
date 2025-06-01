@@ -7,8 +7,8 @@ import { ThemeProvider } from '../../../components/theme/theme-provider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Asset Viewer',
-  description: 'Dark-themed asset viewer with split-screen layout',
+  title: 'Mixio Pro',
+  description: 'Mixio Pro is a powerful platform for building AI applications with ease. It provides a comprehensive set of tools and features to help you create, deploy, and manage AI solutions efficiently.',
 };
 
 export default function RootLayout({

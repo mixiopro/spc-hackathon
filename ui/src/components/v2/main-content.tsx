@@ -50,6 +50,7 @@ export default function MainContent() {
         width={width}
         aspectRatio={aspectRatio}
       >
+        
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           <div className="p-4 border-b border-border">
             <Tabs defaultValue="render" className="w-full">
