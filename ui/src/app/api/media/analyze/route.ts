@@ -9,6 +9,8 @@ if (!process.env.NEXT_PRIVATE_GEMINI_API_KEY) {
 
 const ai = new GoogleGenAI({
   apiKey: process.env.NEXT_PRIVATE_GEMINI_API_KEY,
+
+  // httpOptions: { apiVersion: "v1" },
 });
 
 // The full schema for clarity, matching the one from your example
@@ -90,7 +92,7 @@ const config = {
   responseMimeType: "application/json", // Gemini will format its output as JSON
   responseSchema: fullResponseSchema,
 };
-const model = "gemini-2.5-flash-preview-05-20";
+const model = "gemini-2.5-flash-preview-05-20"; // 'gemini-1.5-flash'
 
 export async function POST(req: NextRequest) {
   try {
