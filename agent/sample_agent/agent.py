@@ -38,11 +38,11 @@ class AgentState(CopilotKitState):
     Agent state for the ReVideo LangGraph agent.
     Inherits chat history (messages) from CopilotKitState.
     """
-    assets: List[Asset] = []
-    starter_code: Optional[str] = None
-    prompt: str = ""
-    planner_result: Dict[str, Any] = {}
-    final_result: Dict[str, Any] = {}
+    assets: List[Asset]
+    starter_code: Optional[str]
+    prompt: str
+    planner_result: Dict[str, Any]
+    final_result: Dict[str, Any]
 
 async def fetch_and_base64(url: str) -> str:
     import httpx
@@ -61,18 +61,22 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
 
     # Add each asset as a HumanMessage with appropriate content
     for i, asset in enumerate(state["assets"]):
-        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset['type']}): {asset['description']}"}]
-        if asset["type"] == "image":
-            asset_msg.append({"type": "image_url", "image_url": asset["gsUri"]})
-        elif asset["type"] in ("audio", "video"):
+        asset_msg: List[Dict[str, Any]] = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
+        if asset.type == "image":
+            asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
+        elif asset.type in ("audio", "video"):
             # Assume gsUri is a direct https URL to the file
-            mime = "audio/mpeg" if asset["type"] == "audio" else "video/mp4"
+            mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
             try:
-                data = await fetch_and_base64(asset["gsUri"])
+                data = await fetch_and_base64(asset.gsUri)
                 asset_msg.append({"type": "media", "data": data, "mime_type": mime})
             except Exception as e:
-                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset['type']} at {asset['gsUri']}: {e}]"})
-        messages.append(HumanMessage(content=asset_msg))
+                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
+            # Explicitly create a list whose elements match the type expected by HumanMessage content list.
+            # HumanMessage content list elements are str | Dict[Any, Any].
+            # Each 'item' in asset_msg is Dict[str, Any], which is assignable to str | Dict[Any, Any].
+            current_asset_content_for_message: List[str | Dict[Any, Any]] = [item for item in asset_msg]
+            messages.append(HumanMessage(content=current_asset_content_for_message))
 
     # Add template and goal as final HumanMessage
     messages.append(HumanMessage(content=[
