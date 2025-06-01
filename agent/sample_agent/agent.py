@@ -55,29 +55,29 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
     """
     Node to generate a plan for video editing based on assets, template, and prompt.
     Passes full chat history for context, and injects images/audio/video as Gemini-compatible multimodal input.
-    """
-    assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
-    messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
-    state['prompt'] = state['messages'][-1].content
+    # """
+    # assets_dict = {str(i): asset for i, asset in enumerate(state["assets"])}
+    # messages = [SystemMessage(content=DEFAULT_PLANNER_SYSTEM_PROMPT)] + list(state["messages"][:-1])
+    # state['prompt'] = state['messages'][-1].content
 
-    # Add each asset as a HumanMessage with appropriate content
-    for i, asset in enumerate(state["assets"]):
-        asset_msg: List[Dict[str, Any]] = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
-        if asset.type == "image":
-            asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
-        elif asset.type in ("audio", "video"):
-            # Assume gsUri is a direct https URL to the file
-            mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
-            try:
-                data = await fetch_and_base64(asset.gsUri)
-                asset_msg.append({"type": "media", "data": data, "mime_type": mime})
-            except Exception as e:
-                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
-            # Explicitly create a list whose elements match the type expected by HumanMessage content list.
-            # HumanMessage content list elements are str | Dict[Any, Any].
-            # Each 'item' in asset_msg is Dict[str, Any], which is assignable to str | Dict[Any, Any].
-            current_asset_content_for_message: List[str | Dict[Any, Any]] = [item for item in asset_msg]
-            messages.append(HumanMessage(content=current_asset_content_for_message))
+    # # Add each asset as a HumanMessage with appropriate content
+    # for i, asset in enumerate(state["assets"]):
+    #     asset_msg: List[Dict[str, Any]] = [{"type": "text", "text": f"Asset {i} ({asset.type}): {asset.description}"}]
+    #     if asset.type == "image":
+    #         asset_msg.append({"type": "image_url", "image_url": asset.gsUri})
+    #     elif asset.type in ("audio", "video"):
+    #         # Assume gsUri is a direct https URL to the file
+    #         mime = "audio/mpeg" if asset.type == "audio" else "video/mp4"
+    #         try:
+    #             data = await fetch_and_base64(asset.gsUri)
+    #             asset_msg.append({"type": "media", "data": data, "mime_type": mime})
+    #         except Exception as e:
+    #             asset_msg.append({"type": "text", "text": f"[Could not fetch {asset.type} at {asset.gsUri}: {e}]"})
+    #         # Explicitly create a list whose elements match the type expected by HumanMessage content list.
+    #         # HumanMessage content list elements are str | Dict[Any, Any].
+    #         # Each 'item' in asset_msg is Dict[str, Any], which is assignable to str | Dict[Any, Any].
+    #         current_asset_content_for_message: List[str | Dict[Any, Any]] = [item for item in asset_msg]
+    #         messages.append(HumanMessage(content=current_asset_content_for_message))
 
     # Add template and goal as final HumanMessage
     messages.append(HumanMessage(content=[
@@ -107,16 +107,16 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
     """
     Node to call the ReVideo generation service with the plan and assets.
     """
-    plan = state["planner_result"].get("plan", "")
-    numbered_assets = state["planner_result"].get("numbered_assets", {})
-    payload = {
-        "plan": plan,
-        "template_code": state["starter_code"],
-        "description": state["prompt"],
-        "assets": numbered_assets,
-        "variables": {},
-        "settings": {}
-    }
+    # plan = state["planner_result"].get("plan", "")
+    # numbered_assets = state["planner_result"].get("numbered_assets", {})
+    # payload = {
+    #     "plan": plan,
+    #     "template_code": state["starter_code"],
+    #     "description": state["prompt"],
+    #     "assets": numbered_assets,
+    #     "variables": {},
+    #     "settings": {}
+    # }
     # print(payload)
     # Mock final_result: use static value from constants
     # async with httpx.AsyncClient(timeout=360.0) as client:
