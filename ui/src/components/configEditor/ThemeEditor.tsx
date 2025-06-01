@@ -21,15 +21,15 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
 
   const ColorInput = ({ label, name, value }: { label: string; name: string; value: string }) => (
     <div className="space-y-2">
-      <Label className="text-sm font-medium text-slate-200">{label}</Label>
+      <Label className="text-sm font-medium text-foreground">{label}</Label>
       <div className="flex gap-2 items-center">
         <div
-          className="w-10 h-10 rounded-md border-2 border-slate-600 shadow-sm"
+          className="w-10 h-10 rounded-md border-2 border-border shadow-sm"
           style={{ backgroundColor: value }}
         />
         <Input
           {...register(name as any)}
-          className="flex-1 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
+          className="flex-1 bg-muted border-border text-foreground placeholder:text-muted-foreground"
           placeholder="#000000"
         />
       </div>
@@ -53,8 +53,8 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
   }) => (
     <div className="space-y-3">
       <div className="flex justify-between items-center">
-        <Label className="text-sm font-medium text-slate-200">{label}</Label>
-        <span className="text-sm text-slate-400 bg-slate-700 px-2 py-1 rounded">
+        <Label className="text-sm font-medium text-foreground">{label}</Label>
+        <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded">
           {value}
         </span>
       </div>
@@ -71,12 +71,12 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-background border-border">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100">Color Palette</CardTitle>
-          <CardDescription className="text-slate-400">Customize the visual appearance of your demo</CardDescription>
+          <CardTitle className="text-lg text-foreground">Color Palette</CardTitle>
+          <CardDescription className="text-muted-foreground">Customize the visual appearance of your demo</CardDescription>
         </CardHeader>
-        <CardContent className="bg-slate-800">
+        <CardContent className="bg-background">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(themeValues.colors).map(([key, value]) => (
               <ColorInput 
@@ -90,12 +90,12 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-background border-border">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100">Animation Timing</CardTitle>
-          <CardDescription className="text-slate-400">Fine-tune animation durations and timing</CardDescription>
+          <CardTitle className="text-lg text-foreground">Animation Timing</CardTitle>
+          <CardDescription className="text-muted-foreground">Fine-tune animation durations and timing</CardDescription>
         </CardHeader>
-        <CardContent className="bg-slate-800">
+        <CardContent className="bg-background">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {Object.entries(themeValues.animation).map(([key, value]) => (
               <SliderInput
@@ -112,11 +112,11 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-slate-800 border-slate-700">
+        <Card className="bg-background border-border">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-100">Audio Settings</CardTitle>
+            <CardTitle className="text-lg text-foreground">Audio Settings</CardTitle>
           </CardHeader>
-          <CardContent className="bg-slate-800">
+          <CardContent className="bg-background">
             {Object.entries(themeValues.audio).map(([key, value]) => (
               <SliderInput
                 key={key}
@@ -130,11 +130,11 @@ export const ThemeEditor: React.FC<ThemeEditorProps> = ({ form }) => {
           </CardContent>
         </Card>
 
-        <Card className="bg-slate-800 border-slate-700">
+        <Card className="bg-background border-border">
           <CardHeader>
-            <CardTitle className="text-lg text-slate-100">Layout Settings</CardTitle>
+            <CardTitle className="text-lg text-foreground">Layout Settings</CardTitle>
           </CardHeader>
-          <CardContent className="bg-slate-800">
+          <CardContent className="bg-background">
             <div className="space-y-4">
               {Object.entries(themeValues.layout).map(([key, value]) => (
                 <SliderInput

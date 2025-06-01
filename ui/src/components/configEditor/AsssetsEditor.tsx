@@ -27,22 +27,22 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-background border-border">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100 flex items-center gap-2">
+          <CardTitle className="text-lg text-foreground flex items-center gap-2">
             🎵 Background Audio
           </CardTitle>
-          <CardDescription className="text-slate-400">Set the background music for your demo</CardDescription>
+          <CardDescription className="text-muted-foreground">Set the background music for your demo</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <Label htmlFor="backgroundMusic" className="text-slate-200">Background Music URL</Label>
+            <Label htmlFor="backgroundMusic" className="text-foreground">Background Music URL</Label>
             <div className="flex gap-2">
               <Input
                 id="backgroundMusic"
                 {...register('assets.audio.backgroundMusic')}
                 placeholder="https://example.com/audio.mp3"
-                className="flex-1 bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
+                className="flex-1 bg-muted border-border text-foreground placeholder:text-muted-foreground"
               />
               {audioUrl && (
                 <Button
@@ -50,7 +50,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(audioUrl, '_blank')}
-                  className="flex items-center gap-1 bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600"
+                  className="flex items-center gap-1 bg-muted border-border text-foreground hover:bg-muted/80"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </Button>
@@ -60,36 +60,36 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
         </CardContent>
       </Card>
 
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-background border-border">
         <CardHeader>
-          <CardTitle className="text-lg text-slate-100 flex items-center gap-2">
+          <CardTitle className="text-lg text-foreground flex items-center gap-2">
             🎬 Video Assets
           </CardTitle>
-          <CardDescription className="text-slate-400">Manage your video clips for the demo sequence</CardDescription>
+          <CardDescription className="text-muted-foreground">Manage your video clips for the demo sequence</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="p-4 border rounded-lg bg-slate-700 border-slate-600 hover:bg-slate-600 transition-colors">
+              <div key={field.id} className="p-4 border rounded-lg bg-muted border-border hover:bg-muted/80 transition-colors">
                 <div className="flex items-start gap-4">
                   <div className="flex-1 space-y-3">
                     <div>
-                      <Label htmlFor={`video-name-${index}`} className="text-slate-200">Video Name</Label>
+                      <Label htmlFor={`video-name-${index}`} className="text-foreground">Video Name</Label>
                       <Input
                         id={`video-name-${index}`}
                         {...register(`assets.videos.${index}.name`)}
                         placeholder="e.g., 1_SelectUseCase"
-                        className="bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
+                        className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                       />
                     </div>
                     <div>
-                      <Label htmlFor={`video-url-${index}`} className="text-slate-200">Video URL</Label>
+                      <Label htmlFor={`video-url-${index}`} className="text-foreground">Video URL</Label>
                       <div className="flex gap-2">
                         <Input
                           id={`video-url-${index}`}
                           {...register(`assets.videos.${index}.url`)}
                           placeholder="https://example.com/video.mp4"
-                          className="flex-1 bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
+                          className="flex-1 bg-muted border-border text-foreground placeholder:text-muted-foreground"
                         />
                         {field.url && (
                           <Button
@@ -97,7 +97,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
                             variant="outline"
                             size="sm"
                             onClick={() => window.open(field.url, '_blank')}
-                            className="flex items-center gap-1 bg-slate-700 border-slate-600 text-slate-200 hover:bg-slate-600"
+                            className="flex items-center gap-1 bg-muted border-border text-foreground hover:bg-muted/80"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </Button>
@@ -122,7 +122,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
               type="button"
               variant="outline"
               onClick={addVideo}
-              className="w-full flex items-center gap-2 border-dashed border-2 border-slate-500 py-8 bg-slate-800 hover:bg-slate-700 text-slate-200"
+              className="w-full flex items-center gap-2 border-dashed border-2 border-border py-8 bg-background hover:bg-muted text-foreground"
             >
               <Plus className="w-4 h-4" />
               Add Video Asset

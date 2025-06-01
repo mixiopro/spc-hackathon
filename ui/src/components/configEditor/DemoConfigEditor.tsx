@@ -200,25 +200,25 @@ export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-6xl mx-auto">
-        <Card className="bg-slate-800 border-slate-700 shadow-2xl">
-          {/* <CardHeader className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-t-lg border-b border-gray-600">
+        <Card className="bg-background border-border shadow-2xl">
+          {/* <CardHeader className="bg-gradient-to-r from-zinc-800 to-zinc-700 text-white rounded-t-lg border-b border-border">
             <CardTitle className="text-3xl font-bold text-white">Demo Configuration Editor</CardTitle>
-            <CardDescription className="text-gray-300">
+            <CardDescription className="text-muted-foreground">
               Configure your video demo settings with real-time preview
             </CardDescription>
           </CardHeader> */}
           
-          <CardContent className="p-0 bg-slate-800">
+          <CardContent className="p-0 bg-background">
             <form onSubmit={form.handleSubmit(handleSave)}>
               <Tabs defaultValue="theme" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 rounded-none border-b border-slate-700 bg-slate-800">
-                  <TabsTrigger value="theme" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400">Theme</TabsTrigger>
-                  <TabsTrigger value="assets" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400">Assets</TabsTrigger>
-                  <TabsTrigger value="content" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400">Content</TabsTrigger>
-                  <TabsTrigger value="sequence" className="data-[state=active]:bg-slate-700 data-[state=active]:text-white text-slate-400">Video Sequence</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-4 rounded-none border-b border-border bg-background">
+                  <TabsTrigger value="theme" className="data-[state=active]:bg-muted data-[state=active]:text-white text-muted-foreground">Theme</TabsTrigger>
+                  <TabsTrigger value="assets" className="data-[state=active]:bg-muted data-[state=active]:text-white text-muted-foreground">Assets</TabsTrigger>
+                  <TabsTrigger value="content" className="data-[state=active]:bg-muted data-[state=active]:text-white text-muted-foreground">Content</TabsTrigger>
+                  <TabsTrigger value="sequence" className="data-[state=active]:bg-muted data-[state=active]:text-white text-muted-foreground">Video Sequence</TabsTrigger>
                 </TabsList>
                 
-                <div className="p-6 bg-slate-800">
+                <div className="p-6 bg-background">
                   <TabsContent value="theme" className="mt-0">
                     <ThemeEditor form={form} />
                   </TabsContent>
@@ -237,12 +237,12 @@ export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
                 </div>
               </Tabs>
               
-              <div className="flex justify-between items-center p-6 bg-slate-700 border-t border-slate-600">
+              <div className="flex justify-between items-center p-6 bg-muted border-t border-border">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={handleExport}
-                  className="flex items-center gap-2 bg-slate-600 border-slate-500 text-white hover:bg-slate-500"
+                  className="flex items-center gap-2 text-white"
                 >
                   <span>📥</span> Export JSON
                 </Button>
@@ -252,13 +252,13 @@ export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
                     type="button"
                     variant="secondary"
                     onClick={() => form.reset()}
-                    className="bg-slate-600 text-white hover:bg-slate-500"
+                    className="text-white"
                   >
                     Reset
                   </Button>
                   <Button 
                     type="submit"
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                    // className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
                   >
                     Save Configuration
                   </Button>

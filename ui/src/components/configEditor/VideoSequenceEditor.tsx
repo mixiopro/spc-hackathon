@@ -44,14 +44,14 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
 
   return (
     <div className="space-y-6">
-      <Card className="bg-slate-800 border-slate-700">
+      <Card className="bg-background border-border">
         <CardHeader>
-          <CardTitle className="text-lg text-white flex items-center gap-2">
+          <CardTitle className="text-lg text-foreground flex items-center gap-2">
             🎞️ Video Sequence
           </CardTitle>
-          <CardDescription className="text-slate-400">Configure the order and timing of video clips</CardDescription>
+          <CardDescription className="text-muted-foreground">Configure the order and timing of video clips</CardDescription>
         </CardHeader>
-        <CardContent className="bg-slate-800">
+        <CardContent className="bg-background">
           <div className="space-y-4">
             <Accordion type="multiple" className="w-full">
               {fields.map((field, index) => {
@@ -59,15 +59,15 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                 const duration = watch(`videoSequence.${index}.duration`);
                 
                 return (
-                  <AccordionItem key={field.id} value={`item-${index}`} className="border rounded-lg border-slate-700 bg-slate-800">
-                    <AccordionTrigger className="px-4 hover:no-underline hover:bg-slate-700/50">
+                  <AccordionItem key={field.id} value={`item-${index}`} className="border rounded-lg border-border bg-background">
+                    <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/50">
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3">
-                          <Play className="w-4 h-4 text-slate-400" />
-                          <span className="font-medium text-white">
+                          <Play className="w-4 h-4 text-muted-foreground" />
+                          <span className="font-medium text-foreground">
                             {clipName || `Clip ${index + 1}`}
                           </span>
-                          <span className="text-sm text-slate-400">
+                          <span className="text-sm text-muted-foreground">
                             ({duration}s)
                           </span>
                         </div>
@@ -93,11 +93,11 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                               id={`clip-name-${index}`}
                               {...register(`videoSequence.${index}.clipName`)}
                               placeholder="e.g., 1_SelectUseCase"
-                              className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
+                              className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                             />
                           </div>
                           <div>
-                            <Label htmlFor={`duration-${index}`} className="text-slate-200">Duration (seconds)</Label>
+                            <Label htmlFor={`duration-${index}`} className="text-foreground">Duration (seconds)</Label>
                             <Input
                               id={`duration-${index}`}
                               type="number"
@@ -109,11 +109,11 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                         </div>
 
                         <div>
-                          <Label className="text-base font-medium mb-3 block text-slate-200">Key Points (seconds)</Label>
+                          <Label className="text-base font-medium mb-3 block text-foreground">Key Points (seconds)</Label>
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {keyPointFields.map((kp) => (
                               <div key={kp.key}>
-                                <Label htmlFor={`${kp.key}-${index}`} className="text-sm text-slate-200">
+                                <Label htmlFor={`${kp.key}-${index}`} className="text-sm text-foreground">
                                   {kp.label}
                                 </Label>
                                 <Input
@@ -122,7 +122,7 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                                   step="0.1"
                                   {...register(`videoSequence.${index}.keyPoints.${kp.key}` as any, { valueAsNumber: true })}
                                   placeholder="0.0"
-                                  className="text-sm bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
+                                  className="text-sm bg-muted border-border text-foreground placeholder:text-muted-foreground"
                                 />
                               </div>
                             ))}
@@ -139,7 +139,7 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
               type="button"
               variant="outline"
               onClick={addSequenceItem}
-              className="w-full flex items-center gap-2 border-dashed border-2 py-8 hover:bg-slate-700 border-slate-600 text-slate-200"
+              className="w-full flex items-center gap-2 border-dashed border-2 py-8 hover:bg-muted border-border text-foreground"
             >
               <Plus className="w-4 h-4" />
               Add Video Sequence Item
