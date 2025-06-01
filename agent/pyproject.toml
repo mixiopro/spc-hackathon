@@ -20,6 +20,7 @@ dependencies = [
     "langchain-core",
     "langgraph-cli[inmem]",
     "langchain-google-genai>=2.1.5",
+    "langchain-mcp-adapters>=0.1.4",
 ]
 
 [build-system]

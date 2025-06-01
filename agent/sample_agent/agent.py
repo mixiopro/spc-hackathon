@@ -10,9 +10,8 @@ import base64
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, END
 from langgraph.types import Command
-from copilotkit import CopilotKitState
+from sample_agent.state import AgentState
 import httpx
-from sample_agent.data.asset import Asset
 import os
 
 if "GOOGLE_API_KEY" not in os.environ:
@@ -31,18 +30,9 @@ Instructions:
 6. Ensure the plan aligns with the template's original purpose and structure where possible, unless the assets clearly necessitate a different approach.
 7. Output *only* the plan as a plain text string. Do not include greetings, explanations, or code snippets in the final plan output.
 """
-REVIDEO_GENERATE_ENDPOINT = "https://aider.mixio.pro/revideo/generate"
+REVIDEO_GENERATE_ENDPOINT = "http://localhost:8000" # "https://aider.mixio.pro/revideo/generate"
 
-class AgentState(CopilotKitState):
-    """
-    Agent state for the ReVideo LangGraph agent.
-    Inherits chat history (messages) from CopilotKitState.
-    """
-    assets: List[Asset] = []
-    starter_code: Optional[str] = None
-    prompt: str = ""
-    planner_result: Dict[str, Any] = {}
-    final_result: Dict[str, Any] = {}
+
 
 async def fetch_and_base64(url: str) -> str:
     import httpx
@@ -61,18 +51,18 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
 
     # Add each asset as a HumanMessage with appropriate content
     for i, asset in enumerate(state["assets"]):
-        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset['type']}): {asset['description']}"}]
-        if asset["type"] == "image":
-            asset_msg.append({"type": "image_url", "image_url": asset["gsUri"]})
-        elif asset["type"] in ("audio", "video"):
+        asset_msg = [{"type": "text", "text": f"Asset {i} ({asset['type']}): {asset['description']}"}] # type: ignore
+        if asset["type"] == "image": # type: ignore
+            asset_msg.append({"type": "image_url", "image_url": asset["gsUri"]}) # type: ignore
+        elif asset["type"] in ("audio", "video"): # type: ignore
             # Assume gsUri is a direct https URL to the file
-            mime = "audio/mpeg" if asset["type"] == "audio" else "video/mp4"
+            mime = "audio/mpeg" if asset["type"] == "audio" else "video/mp4" # type: ignore
             try:
-                data = await fetch_and_base64(asset["gsUri"])
+                data = await fetch_and_base64(asset["gsUri"]) # type: ignore
                 asset_msg.append({"type": "media", "data": data, "mime_type": mime})
             except Exception as e:
-                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset['type']} at {asset['gsUri']}: {e}]"})
-        messages.append(HumanMessage(content=asset_msg))
+                asset_msg.append({"type": "text", "text": f"[Could not fetch {asset['type']} at {asset['gsUri']}: {e}]"}) # type: ignore
+        messages.append(HumanMessage(content=asset_msg)) # type: ignore
 
     # Add template and goal as final HumanMessage
     messages.append(HumanMessage(content=[

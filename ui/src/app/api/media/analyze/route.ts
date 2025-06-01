@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI, Type } from "@google/genai";
+import { lookup as mimeLookup } from "mime-types";
 
 // Ensure environment variable is set
 if (!process.env.NEXT_PRIVATE_GEMINI_API_KEY) {
@@ -94,7 +95,16 @@ const model = "gemini-2.5-flash-preview-05-20";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { fileUri, mimeType, promptText = "Analyze the media" } = body;
+
+    const fileUri = body.fileUri as string | undefined;
+    let mimeType = body.mimeType as string | undefined; // may be undefined
+    const promptText = body.promptText ?? "Analyze the media";
+
+    if (!mimeType && fileUri) {
+      // Strip query/hash and ask mime-types for a best-guess
+      const pathname = new URL(fileUri).pathname;
+      mimeType = mimeLookup(pathname) || undefined;
+    }
 
     if (!fileUri || !mimeType) {
       return NextResponse.json(
