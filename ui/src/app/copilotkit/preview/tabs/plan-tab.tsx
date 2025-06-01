@@ -5,9 +5,11 @@ import ReactMarkdown from "react-markdown";
 export default function PlanTab() {
   const { state } = useCoAgent<AgentState>({ name: "sample_agent" });
 
-  console.log("🚀 -----------------🚀");
-  console.log("🚀 ~ state.planner_result:", state.planner_result);
-  console.log("🚀 -----------------🚀");
+  console.log('🚀 -----------------🚀')
+  console.log('🚀 ~PlanTab state.:', state)
+  console.log('🚀 ~ state.planner_result:', state.planner_result)
+  console.log('🚀 -----------------🚀')
+
 
   return (
     <div className="relative p-6 rounded-md bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border">
