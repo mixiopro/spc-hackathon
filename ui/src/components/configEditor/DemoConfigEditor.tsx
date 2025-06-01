@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { UseFormReturn, useForm } from 'react-hook-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -84,7 +84,7 @@ export type DemoConfig = {
   videoSequence: VideoSequenceItem[];
 };
 
-const defaultConfig: DemoConfig = {
+export const defaultConfig: DemoConfig = {
   theme: {
     colors: {
       white: "#ffffff",
@@ -157,13 +157,15 @@ const defaultConfig: DemoConfig = {
 interface DemoConfigEditorProps {
   initialConfig?: DemoConfig;
   onSave?: (config: DemoConfig) => void;
+  form?: UseFormReturn<DemoConfig>;
 }
 
 export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
   initialConfig = defaultConfig,
-  onSave
+  onSave,
+  form: externalForm
 }) => {
-  const form = useForm<DemoConfig>({
+  const form = externalForm || useForm<DemoConfig>({
     defaultValues: initialConfig
   });
 
@@ -196,7 +198,7 @@ export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-6xl mx-auto">
         <Card className="bg-slate-800 border-slate-700 shadow-2xl">
           {/* <CardHeader className="bg-gradient-to-r from-gray-800 to-gray-700 text-white rounded-t-lg border-b border-gray-600">

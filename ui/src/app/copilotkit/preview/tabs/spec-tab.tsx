@@ -2,9 +2,14 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText } from "lucide-react";
-import { DemoConfigEditor } from "../../../../components/configEditor/DemoConfigEditor";
+import { DemoConfigEditor, DemoConfig } from "@/components/configEditor/DemoConfigEditor";
 
-export default function SpecTab() {
+interface SpecTabProps {
+  initialConfig?: DemoConfig;
+  onSave?: (config: DemoConfig) => void;
+}
+
+export default function SpecTab({ initialConfig, onSave }: SpecTabProps) {
   return (
     <div className="space-y-4 p-1">
       <Card className="bg-card/50 backdrop-blur-sm border-muted">
@@ -37,7 +42,7 @@ export default function SpecTab() {
             </div>
           </div> */}
 
-          <DemoConfigEditor/>
+          <DemoConfigEditor initialConfig={initialConfig} onSave={onSave} />
         </CardContent>
       </Card>
     </div>
