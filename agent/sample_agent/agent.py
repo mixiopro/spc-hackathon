@@ -128,7 +128,7 @@ async def coder_node(state: AgentState, config: RunnableConfig) -> Command[Liter
     return Command(
         goto=END,
         update={
-            "final_result": result
+            "final_result": {"code": result}
         }
     )
 
