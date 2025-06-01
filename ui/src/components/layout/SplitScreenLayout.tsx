@@ -9,7 +9,7 @@ interface SplitScreenLayoutProps {
 
 export const SplitScreenLayout: React.FC<SplitScreenLayoutProps> = () => {
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-screen bg-background">
       {/* Left Pane - 40% width */}
       <div className="w-[30%] h-full">
         <AssetPane />

@@ -13,7 +13,7 @@ export const AssetPane: React.FC<AssetPaneProps> = ({ className }) => {
   return (
     <div className={`flex flex-col h-full bg-background text-foreground ${className}`}>
       {/* Heading */}
-      <h1 className="text-xl font-semibold p-4 border-b border-border">
+      <h1 className="text-xl font-semibold p-4 border-b border-border/20 text-foreground/90">
         Assets {state?.assets?.length ? `(${state.assets.length})` : ''}
       </h1>
 
@@ -29,14 +29,14 @@ export const AssetPane: React.FC<AssetPaneProps> = ({ className }) => {
           if (!typeAssets.length) return null;
           
           return (
-            <section key={type} className="p-4 border-b border-border">
-              <h2 className="text-lg font-medium mb-3 text-muted-foreground capitalize">
+            <section key={type} className="p-4 border-b border-border/20">
+              <h2 className="text-lg font-medium mb-3 text-foreground/70 capitalize">
                 {type}s ({typeAssets.length})
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {typeAssets.map(asset => (
 
-                  <div>
+                  <div className="bg-card/30 rounded-lg p-2 border border-border/20 hover:border-border/40 transition-colors">
                      {asset.type === 'video' && (
                         <video
                           className="w-full max-w-full max-h-[200px] rounded-md object-contain"

@@ -55,7 +55,7 @@ export function Preview() {
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-background text-foreground">
       <LiveProvider
         code={state.final_result?.code || ""}
         autoCompile={true}
@@ -63,23 +63,22 @@ export function Preview() {
         width={width}
         aspectRatio={aspectRatio}
       >
-        {/* <div className="flex items-center justify-end mb-4">
-          <LiveRun />
-        </div> */}
         <Tabs defaultValue="render" className="flex-1 flex flex-col overflow-hidden">
-          <TabsList className="w-full bg-card p-0 h-12">
+          <TabsList className="w-full bg-card/30 p-0 h-10 border-b border-border/20">
             {tabs.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value}
-              className="flex-1 data-[state=active]:bg-accent"
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="px-4 min-w-[80px] data-[state=active]:bg-accent/40 data-[state=active]:text-accent-foreground/90 text-muted-foreground hover:text-foreground/80 transition-colors"
               >
                 {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          <TabsContent value="render">
+          <TabsContent value="render" className="flex-1 bg-background">
             <TabContentWrapper>
-              <Card className="relative">
+              <Card className="relative border-border/20 bg-card/30">
                 <div className="absolute inset-0">
                   <LivePreview
                     width={width}
@@ -94,7 +93,7 @@ export function Preview() {
 
           <TabsContent value="code">
             <TabContentWrapper>
-              <Card>
+              <Card className="border-border/20 bg-card/30">
                 <LiveEditor className="w-full h-full font-mono text-sm" />
               </Card>
             </TabContentWrapper>
@@ -102,7 +101,7 @@ export function Preview() {
 
           <TabsContent value="spec">
             <TabContentWrapper>
-              <Card>
+              <Card className="border-border/20 bg-card/30">
                 <ParameterEditor
                   parameters={liveParams}
                   onParameterChange={handleParameterChange}
