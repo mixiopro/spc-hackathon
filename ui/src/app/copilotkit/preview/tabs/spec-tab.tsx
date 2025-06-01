@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText } from "lucide-react";
+import { DemoConfigEditor } from "../../../../components/configEditor/DemoConfigEditor";
 
 export default function SpecTab() {
   return (
@@ -17,7 +18,7 @@ export default function SpecTab() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md bg-muted/50 border border-border h-[400px] p-4 overflow-auto">
+          {/* <div className="rounded-md bg-muted/50 border border-border h-[400px] p-4 overflow-auto">
             <div className="space-y-4 text-muted-foreground">
               <p>Asset specifications will be displayed here when an asset is selected.</p>
               
@@ -34,7 +35,9 @@ export default function SpecTab() {
                 <div>-</div>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          <DemoConfigEditor/>
         </CardContent>
       </Card>
     </div>

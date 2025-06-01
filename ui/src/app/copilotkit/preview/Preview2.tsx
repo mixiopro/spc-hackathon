@@ -6,6 +6,7 @@ import RenderTab from "./tabs/render-tab"
 import CodeTab from "./tabs/code-tab"
 import SpecTab from "./tabs/spec-tab"
 
+// @deprecated
 export function Preview2() {
   return (
     <div className="flex flex-col h-full bg-background">
