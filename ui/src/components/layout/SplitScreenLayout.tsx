@@ -2,6 +2,7 @@ import React from 'react';
 import AssetPane from './AssetPane';
 import ContentPane from './ContentPane';
 import { Preview } from '../../app/copilotkit/preview/Preview';
+import { Preview2 } from '../../app/copilotkit/preview/Preview2';
 
 interface SplitScreenLayoutProps {
   children?: React.ReactNode;
@@ -17,7 +18,7 @@ export const SplitScreenLayout: React.FC<SplitScreenLayoutProps> = () => {
 
       {/* Right Pane - 60% width */}
       <div className="w-[70%] h-full">
-        <Preview />
+        <Preview2 />
       </div>
     </div>
   );

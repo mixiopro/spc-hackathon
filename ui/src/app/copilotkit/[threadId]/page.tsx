@@ -1,6 +1,5 @@
 "use client";
 
-import PlaygroundRenderer from "@/components/revid";
 import { initialState } from "@/constants/initial.state";
 import { AgentState } from "@/data/interfaces/coagent.interface";
 import {
@@ -10,11 +9,7 @@ import {
 } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
 import { useEffect, useState } from "react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "../../../components/ui/breadcrumb";
-import { Separator } from "../../../components/ui/separator";
-import { SidebarTrigger } from "../../../components/ui/sidebar";
-import { Preview } from "../preview/Preview";
-import SplitScreenLayout from "../../../components/layout/SplitScreenLayout";
+import AppLayout from "../../../components/v2/app-layout";
 
 export default function CopilotKitPage({
   params,
@@ -90,26 +85,8 @@ function YourMainContent({ themeColor }: { themeColor: string }) {
   //   },
   // });
 
-  return (
-    <div className="h-screen">
-
-      <div
-        // This div centers the content block below the header.
-        // Added flex-col, items-center for centering, overflow-y-auto for scrolling, and padding.
-        // className="h-[calc(100vh-70px)] w-full flex flex-col items-center overflow-y-auto p-4 sm:p-6 md:p-8 transition-colors duration-300"
-      >
-        <div
-          // This is the main content block, styled to be white with shadow and rounded corners.
-          // Increased max-width to allow for more cards per row.
-          // Removed bg-white and shadow-xl, reduced padding from p-6 sm:p-8 to p-4.
-          className="w-full"
-        >
-
-          {/* <Preview /> */}
-          <SplitScreenLayout />
-        </div>
-      </div>
-    </div>
+return (
+    <AppLayout />
   );
 }
 
