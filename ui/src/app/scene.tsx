@@ -14,6 +14,7 @@ import {
   Txt,
   View2D,
   type PossibleCanvasStyle,
+  // Removed useScene from here: useScene,
 } from "@revideo/2d";
 import {
   waitFor as _waitFor,
@@ -34,7 +35,34 @@ import {
   tween,
   Vector2,
   waitFor,
+  useScene, // MOVED: Import useScene from @revideo/core
 } from "@revideo/core";
+
+// ADDED: useTheme function as provided by the user
+function useTheme() {
+  const scene = useScene();
+  const { width, height } = scene.getSize();
+  const unit = width / 100; // 1 unit = 1% of scene width
+
+  const font = {
+    xs: unit * 2.5,
+    sm: unit * 3.5,
+    base: unit * 4.5,
+    md: unit * 6,
+    lg: unit * 8,
+    xl: unit * 10,
+  };
+
+  const zIndex = {
+    background: -10,
+    circleBehind: 1,
+    contentDefault: 5,
+    contentAboveCircle: 6,
+    overlay: 100,
+  };
+
+  return { width, height, unit, font, zIndex };
+}
 
 export interface BackgroundProps extends RectProps {
   view: View2D;
@@ -73,8 +101,8 @@ export function tToRadians(v: number): number {
 export const positionItemInRow = (
   i: number,
   count: number,
-  size: number,
-  padding: number
+  size: number, // This size is now relative (e.g., unit * 10)
+  padding: number // This padding is now relative (e.g., unit * 5)
 ) => {
   const spacing = size + padding;
   const start = -(count - 1) * 0.5 * spacing;
@@ -189,8 +217,8 @@ export interface CreditsProps extends LayoutProps {
   title?: string | SimpleSignal<string>;
   author: string | SimpleSignal<string>;
   fontFamily?: string;
-  fontSize1?: number;
-  fontSize2?: number;
+  fontSize1?: number; // Now takes scaled font size
+  fontSize2?: number; // Now takes scaled font size
   color1?: PossibleCanvasStyle;
   color2?: PossibleCanvasStyle;
 }
@@ -203,7 +231,9 @@ export class Credits extends Layout {
     this.zIndex(1000);
     this.layout(true);
     this.direction("column");
-    this.padding([12, 20]);
+    // Initial padding can be unit-based or dynamic, but AoC static method overrides it.
+    // This value is not used after the static method.
+    // this.padding([12, 20]);
 
     this.add(
       <>
@@ -211,29 +241,34 @@ export class Credits extends Layout {
           text={props.title}
           fill={props.color1 ?? "#aaa"}
           fontFamily={props.fontFamily}
-          fontSize={props.fontSize1}
+          fontSize={props.fontSize1} // Uses passed/defaulted font size
         />
         <Txt
           text={props.author}
           fill={props.color2 ?? "#efefef"}
           fontFamily={props.fontFamily}
-          fontSize={props.fontSize2}
+          fontSize={props.fontSize2} // Uses passed/defaulted font size
         />
       </>
     );
   }
 
   public static AoC(props: CreditsProps) {
+    const { unit, font } = useTheme(); // Get theme for default font sizes and padding
+
     const credits = new Credits({
       ...props,
       fontFamily: AoCTheme.fontFamily,
-      fontSize1: 32,
-      color1: AoCTheme.white,
-      color2: AoCTheme.gray,
+      // MODIFIED: Use passed font sizes or fall back to theme-based defaults
+      fontSize1: props.fontSize1 ?? font.base * 1.2, // ~32px at default 1080p width
+      color1: props.color1 ?? AoCTheme.white,
+      fontSize2: props.fontSize2 ?? font.base,     // ~24px at default 1080p width
+      color2: props.color2 ?? AoCTheme.gray,
     });
 
     const { byOrientation } = getViewportData(props.view);
-    credits.padding([byOrientation(12, 100), 20]);
+    // MODIFIED: Scale padding values
+    credits.padding([byOrientation(unit * 1.2, unit * 10), unit * 2]); // (12, 20) -> (unit*1.2, unit*2), (100, 20) -> (unit*10, unit*2)
 
     props.ref?.(credits);
 
@@ -255,11 +290,12 @@ export function addBgCredits(
   { sketchId, year, day, part, wip, hideTitle }: Options
 ) {
   const { byOrientation, viewW, viewH } = getViewportData(view);
+  const { unit, font } = useTheme(); // ADDED: Get theme for scaling
 
   const bg = createRef<Background>();
 
-  const fontSize = 48;
-  const x = 10;
+  const fontSize = font.lg; // MODIFIED: Use theme font size
+  const x = unit * 1; // MODIFIED: Relative x position (10px -> 1 unit)
 
   view.add(
     <>
@@ -272,7 +308,8 @@ export function addBgCredits(
           height={viewH}
           layout
           direction="column"
-          padding={byOrientation(30, 100)}
+          // MODIFIED: Scale padding values
+          padding={byOrientation(unit * 3, unit * 10)} // (30, 100) -> (unit*3, unit*10)
         >
           <Txt
             text={`Advent of Code ${year}`}
@@ -292,6 +329,9 @@ export function addBgCredits(
         textAlign="right"
         bottomRight={bg().bottomRight}
         view={view}
+        // MODIFIED: Pass scaled font sizes to Credits.AoC
+        fontSize1={font.base}
+        fontSize2={font.sm}
       />
     </>
   );
@@ -302,10 +342,11 @@ export function addBgCredits(
         text="*WIP*"
         fill={AoCTheme.orange}
         zIndex={100000}
-        fontSize={100}
+        fontSize={font.xl * 1.2} // MODIFIED: Larger scaled font size
         rotation={byOrientation(-10, -7)}
         topLeft={bg().topLeft}
-        padding={byOrientation([70, 30], [260, 0])}
+        // MODIFIED: Scale padding values
+        padding={byOrientation([unit * 7, unit * 3], [unit * 26, 0])} // ([70, 30], [260, 0]) -> ([unit*7, unit*3], [unit*26, 0])
       />
     );
   }
@@ -389,6 +430,9 @@ export class Cell extends Rect {
         text={this.text}
         fill={this.textFill}
         fontFamily={AoCTheme.fontFamily}
+        // MODIFIED: Use createSignal to ensure font size reacts to changes in props.size
+        // and correctly accesses the signal value
+        fontSize={createSignal(() => props.size() * 0.5)}
       />
     );
   }
@@ -521,9 +565,10 @@ export class FramesLayout extends Layout {
   }
 
   public *transitionToTop() {
+    const { unit } = useTheme(); // ADDED: Get theme for scaling
     yield* all(
       this.scale(0.5, 0.6, easeInOutCubic),
-      this.position.y(-300, 0.6, easeInOutCubic)
+      this.position.y(-unit * 30, 0.6, easeInOutCubic) // MODIFIED: Scale Y position (300px -> 30 units)
     );
   }
 
@@ -569,13 +614,14 @@ export class ValueDisplay extends Layout {
 
   public constructor(props: ValueDisplayProps) {
     super(props);
+    const { font } = useTheme(); // ADDED: Get theme for font sizes and gaps
 
-    this.gap(22);
+    this.gap(font.md * 0.8); // MODIFIED: Scale gap based on font size (22px)
 
     this.add(
       <>
-        <Txt text={`${props.label}:`} fill={AoCTheme.gray} />
-        <Code ref={this.codeRef} code={valueToString(this.value())} />
+        <Txt text={`${props.label}:`} fill={AoCTheme.gray} fontSize={font.base} /> // MODIFIED: Set font size
+        <Code ref={this.codeRef} code={valueToString(this.value())} fontSize={font.base} /> // MODIFIED: Set font size
       </>
     );
   }
@@ -595,11 +641,12 @@ export class ValueDisplay extends Layout {
 }
 
 export default makeScene2D("name", function* (view) {
+  const { unit, font, width, height } = useTheme(); // ADDED: Get theme properties
   const { landscape } = getViewportData(view);
 
   addBgCredits(view, { sketchId: 2017, year: 1, day: 1, part: 1 }); // Adjusted call
 
-  const yGap = 120;
+  const yGap = unit * 12; // MODIFIED: Scale yGap (120px -> 12 units)
 
   const curExample = createSignal(0);
   const y = createSignal(() => curExample() * -yGap);
@@ -624,6 +671,9 @@ export default makeScene2D("name", function* (view) {
     yield* _waitFor(value / speed());
   }
 
+  const cellSize = unit * 10; // MODIFIED: Scale cell size (100px -> 10 units)
+  const cellPadding = unit * 5; // MODIFIED: Scale cell padding (50px -> 5 units)
+
   view.add(
     <Layout y={y}>
       {examples.map((input, index) => (
@@ -636,9 +686,9 @@ export default makeScene2D("name", function* (view) {
             <Cell
               ref={makeRef(cells[index], i)}
               speed={speed}
-              x={positionItemInRow(i, input.length, 100, 50)}
+              x={positionItemInRow(i, input.length, cellSize, cellPadding)} // MODIFIED: Use scaled values
               value={digit.toString()}
-              size={100}
+              size={cellSize} // MODIFIED: Use scaled size
             />
           ))}
         </Layout>
@@ -657,10 +707,10 @@ export default makeScene2D("name", function* (view) {
       alignContent={"center"}
       justifyContent={"center"}
       alignItems={"center"}
-      y={7}
-      gap={130}
+      y={unit * 7} // MODIFIED: Scale y position (7px -> 0.7 units if it was 7 pixels, or 7 units if 100px is 10 units)
+      gap={unit * 13} // MODIFIED: Scale gap (130px -> 13 units)
     >
-      <Layout layout gap={70}>
+      <Layout layout gap={unit * 7}> // MODIFIED: Scale gap (70px -> 7 units)
         <ValueDisplay ref={curDisplay} label="Cur" value={-1} speed={speed} />
         <ValueDisplay ref={nextDisplay} label="Next" value={-1} speed={speed} />
       </Layout>
