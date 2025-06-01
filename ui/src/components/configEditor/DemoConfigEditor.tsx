@@ -9,6 +9,7 @@ import { AssetsEditor } from './AsssetsEditor';
 import { ContentEditor } from './ContentEditor';
 import { ThemeEditor } from './ThemeEditor';
 import { VideoSequenceEditor } from './VideoSequenceEditor';
+import { FormState } from '../v2/main-content';
 
 
 export type VideoKeyPoints = {
@@ -157,7 +158,7 @@ export const defaultConfig: DemoConfig = {
 interface DemoConfigEditorProps {
   initialConfig?: DemoConfig;
   onSave?: (config: DemoConfig) => void;
-  form?: UseFormReturn<DemoConfig>;
+  form?: UseFormReturn<FormState>;
 }
 
 export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
@@ -165,17 +166,20 @@ export const DemoConfigEditor: React.FC<DemoConfigEditorProps> = ({
   onSave,
   form: externalForm
 }) => {
-  const form = externalForm || useForm<DemoConfig>({
-    defaultValues: initialConfig
+  const form = externalForm || useForm<FormState>({
+    defaultValues: {
+      config: initialConfig,
+      code: ""
+    }
   });
 
-  const handleSave = (data: DemoConfig) => {
+  const handleSave = (data: FormState) => {
     console.log('Saving configuration:', data);
     toast({
       title: "Configuration Saved",
       description: "Your demo configuration has been successfully updated.",
     });
-    onSave?.(data);
+    onSave?.(data.config);
   };
 
   const handleExport = () => {

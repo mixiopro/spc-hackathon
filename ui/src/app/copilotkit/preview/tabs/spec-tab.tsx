@@ -1,8 +1,8 @@
 "use client";
 
+import { DemoConfig, DemoConfigEditor } from "@/components/configEditor/DemoConfigEditor";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText } from "lucide-react";
-import { DemoConfigEditor, DemoConfig } from "@/components/configEditor/DemoConfigEditor";
 
 interface SpecTabProps {
   initialConfig?: DemoConfig;

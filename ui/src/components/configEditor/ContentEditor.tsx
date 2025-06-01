@@ -1,25 +1,25 @@
 
-import React from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Trash2, Plus } from 'lucide-react';
-import { DemoConfig } from './DemoConfigEditor';
+import { Plus, Trash2 } from 'lucide-react';
+import React from 'react';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { FormState } from '../v2/main-content';
 
 
 interface ContentEditorProps {
-  form: UseFormReturn<DemoConfig>;
+  form: UseFormReturn<FormState>;
 }
 
 export const ContentEditor: React.FC<ContentEditorProps> = ({ form }) => {
   const { register, control, watch } = form;
-  const contentValues = watch('content');
+  const contentValues = watch('config.content');
   
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'content.overlays.loadingSteps'
+    name: 'config.content.overlays.loadingSteps'
   });
 
   const addLoadingStep = () => {
@@ -88,7 +88,7 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ form }) => {
                   <div key={field.id} className="flex gap-2 items-center">
                     <div className="flex-1">
                       <Input
-                        {...register(`content.overlays.loadingSteps.${index}.name`)}
+                        {...register(`config.content.overlays.loadingSteps.${index}.name`)}
                         placeholder={`Loading step ${index + 1}`}
                         className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                       />

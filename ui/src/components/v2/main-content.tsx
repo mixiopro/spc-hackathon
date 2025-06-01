@@ -1,26 +1,37 @@
 "use client";
 
+import { defaultConfig, DemoConfig, DemoConfigEditor } from "@/components/configEditor/DemoConfigEditor";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "@/hooks/use-toast";
 import { useCoAgent } from "@copilotkit/react-core";
 import { Code, FileText, Monitor } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { DemoConfig, defaultConfig, DemoConfigEditor } from "@/components/configEditor/DemoConfigEditor";
-import { toast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import CodeTab from "../../app/copilotkit/preview/tabs/code-tab";
 import RenderTab from "../../app/copilotkit/preview/tabs/render-tab";
 import { AgentState } from "../../lib/types";
 import { LiveProvider } from "../revid/playground";
+export interface FormState {
+    config: DemoConfig;
+    code: string;
+  }
 
 export default function MainContent() {
   const { state } = useCoAgent<AgentState>({ name: "sample_agent" });
-  const form = useForm<DemoConfig>({
-    defaultValues: defaultConfig,
+  
+
+  const form = useForm<FormState>({
+    defaultValues: {
+      config: defaultConfig,
+      code: ""
+    },
     mode: "onChange"
   });
 
-  // Initialize state with full config
-  const [formState, setFormState] = useState<DemoConfig>(defaultConfig);
+  const [formState, setFormState] = useState<FormState>({
+    config: defaultConfig,
+    code: ""
+  });
 
   // Watch all form changes
   useEffect(() => {
@@ -28,7 +39,9 @@ export default function MainContent() {
       console.log('🚀 Form data changed:', value);
       const currentValues = form.getValues();
       console.log('🚀 Current form state:', currentValues);
-      setFormState(currentValues);
+      if (currentValues) {
+        setFormState(currentValues);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -37,7 +50,10 @@ export default function MainContent() {
   // Initialize form with complete config
   useEffect(() => {
     console.log('🚀 Initializing form with complete config...');
-    form.reset(defaultConfig);
+    form.reset({
+      config: defaultConfig,
+      code: ""
+    });
   }, [form]);
 
   const handleFormSubmit = (data: DemoConfig) => {
@@ -55,9 +71,9 @@ export default function MainContent() {
   return (
     <>
       <LiveProvider
-        code={state.final_result?.code || ""}
+        code={formState.code || ""}
         autoCompile={true}
-        parameters={{config: formState}}
+        parameters={{config: formState.config}}
         width={width}
         aspectRatio={aspectRatio}
       >

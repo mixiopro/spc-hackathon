@@ -1,23 +1,22 @@
-
-import React from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Trash2, Plus, Play } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { DemoConfig } from './DemoConfigEditor';
+import { Play, Plus, Trash2 } from 'lucide-react';
+import React from 'react';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { FormState } from '../v2/main-content';
 
 interface VideoSequenceEditorProps {
-  form: UseFormReturn<DemoConfig>;
+  form: UseFormReturn<FormState>;
 }
 
 export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }) => {
   const { register, control, watch } = form;
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'videoSequence'
+    name: 'config.videoSequence'
   });
 
   const addSequenceItem = () => {
@@ -55,8 +54,8 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
           <div className="space-y-4">
             <Accordion type="multiple" className="w-full">
               {fields.map((field, index) => {
-                const clipName = watch(`videoSequence.${index}.clipName`);
-                const duration = watch(`videoSequence.${index}.duration`);
+                const clipName = watch(`config.videoSequence.${index}.clipName`);
+                const duration = watch(`config.videoSequence.${index}.duration`);
                 
                 return (
                   <AccordionItem key={field.id} value={`item-${index}`} className="border rounded-lg border-slate-700 bg-slate-800">
@@ -91,7 +90,7 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                             <Label htmlFor={`clip-name-${index}`}>Clip Name</Label>
                             <Input
                               id={`clip-name-${index}`}
-                              {...register(`videoSequence.${index}.clipName`)}
+                              {...register(`config.videoSequence.${index}.clipName`)}
                               placeholder="e.g., 1_SelectUseCase"
                               className="bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                             />
@@ -102,7 +101,7 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                               id={`duration-${index}`}
                               type="number"
                               step="0.1"
-                              {...register(`videoSequence.${index}.duration`, { valueAsNumber: true })}
+                              {...register(`config.videoSequence.${index}.duration`, { valueAsNumber: true })}
                               placeholder="0"
                             />
                           </div>
@@ -120,7 +119,7 @@ export const VideoSequenceEditor: React.FC<VideoSequenceEditorProps> = ({ form }
                                   id={`${kp.key}-${index}`}
                                   type="number"
                                   step="0.1"
-                                  {...register(`videoSequence.${index}.keyPoints.${kp.key}` as any, { valueAsNumber: true })}
+                                  {...register(`config.videoSequence.${index}.keyPoints.${kp.key}` as any, { valueAsNumber: true })}
                                   placeholder="0.0"
                                   className="text-sm bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                                 />

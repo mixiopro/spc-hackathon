@@ -1,25 +1,25 @@
-import React from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Trash2, Plus, ExternalLink } from 'lucide-react';
-import { DemoConfig } from './DemoConfigEditor';
+import { ExternalLink, Plus, Trash2 } from 'lucide-react';
+import React from 'react';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { FormState } from '../v2/main-content';
 
 
 interface AssetsEditorProps {
-  form: UseFormReturn<DemoConfig>;
+  form: UseFormReturn<FormState>;
 }
 
 export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
   const { register, control, watch } = form;
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'assets.videos'
+    name: 'config.assets.videos'
   });
 
-  const audioUrl = watch('assets.audio.backgroundMusic');
+  const audioUrl = watch('config.assets.audio.backgroundMusic');
 
   const addVideo = () => {
     append({ name: '', url: '' });
@@ -40,7 +40,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
             <div className="flex gap-2">
               <Input
                 id="backgroundMusic"
-                {...register('assets.audio.backgroundMusic')}
+                {...register('config.assets.audio.backgroundMusic')}
                 placeholder="https://example.com/audio.mp3"
                 className="flex-1 bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
               />
@@ -77,7 +77,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
                       <Label htmlFor={`video-name-${index}`} className="text-slate-200">Video Name</Label>
                       <Input
                         id={`video-name-${index}`}
-                        {...register(`assets.videos.${index}.name`)}
+                        {...register(`config.assets.videos.${index}.name`)}
                         placeholder="e.g., 1_SelectUseCase"
                         className="bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
                       />
@@ -87,7 +87,7 @@ export const AssetsEditor: React.FC<AssetsEditorProps> = ({ form }) => {
                       <div className="flex gap-2">
                         <Input
                           id={`video-url-${index}`}
-                          {...register(`assets.videos.${index}.url`)}
+                          {...register(`config.assets.videos.${index}.url`)}
                           placeholder="https://example.com/video.mp4"
                           className="flex-1 bg-slate-700 border-slate-600 text-slate-100 placeholder:text-slate-400"
                         />
