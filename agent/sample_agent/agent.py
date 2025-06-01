@@ -87,7 +87,7 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
         goto="coder_node",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
-            "messages": state["messages"] + [response]
+            # "messages": state["messages"] + [response]
         }
     )
 
