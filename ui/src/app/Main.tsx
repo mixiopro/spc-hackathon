@@ -11,7 +11,7 @@ export default function Main() {
       starterCode: "",
       plannerResult: {},
       finalResult: {},
-      ...initialState,
+      ...initialState
     },
   });
 

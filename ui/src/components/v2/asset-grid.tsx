@@ -27,6 +27,11 @@ const getIconForType = (type: Asset['type']) => {
 
 export default function AssetGrid() {
   const { state } = useCoAgent<AgentState>({ name: "sample_agent" });
+
+  console.log('🚀 -----------------🚀')
+  console.log('🚀 ~AssetGrid state:', state)
+  console.log('🚀 -----------------🚀')
+
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

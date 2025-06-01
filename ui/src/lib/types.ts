@@ -44,4 +44,5 @@ export interface ReVideoAgentState {
   final_result?: {
     code? : string
   };
+  plan?: string;
 }
