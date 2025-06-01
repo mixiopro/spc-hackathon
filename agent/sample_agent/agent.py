@@ -30,6 +30,7 @@ Instructions:
 5. Focus on *what* needs to change in the code, not *how* to write the code itself. The next step involves a coder AI.
 6. Ensure the plan aligns with the template's original purpose and structure where possible, unless the assets clearly necessitate a different approach.
 7. Output *only* the plan as a plain text string. Do not include greetings, explanations, or code snippets in the final plan output.
+8. MAKE SURE THAT ONLY THE ASSETS PROVIDED ARE KEPT IN THE PLAN. REMOVE ANY EXTRA ASSETS FROM THE STARTER CODE THAT ARE NOT PRESENT IN THE ASSETS.
 """
 REVIDEO_GENERATE_ENDPOINT = "https://aider.mixio.pro/revideo/generate"
 
@@ -87,7 +88,7 @@ async def planner_node(state: AgentState, config: RunnableConfig) -> Command[Lit
         goto="coder_node",
         update={
             "planner_result": {"plan": plan, "numbered_assets": assets_dict},
-            # "messages": state["messages"] + [response]
+            "messages": state["messages"] + [response]
         }
     )
 
