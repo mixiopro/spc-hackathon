@@ -33,7 +33,7 @@ export default function RenderTab({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="absolute inset-0">
+          <div className="">
             <LivePreview
               width={width}
               height={width / aspectRatio}

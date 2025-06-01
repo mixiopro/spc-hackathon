@@ -16,6 +16,7 @@ import { ParameterEditor } from "../ui/parameter-editor";
 import { useCoAgent } from "@copilotkit/react-core";
 import { useState } from "react";
 import { AgentState } from "../../lib/types";
+import { Monitor, Code, FileText } from "lucide-react";
 
 // Default parameters matching PlaygroundRenderer
 const defaultParams = {
@@ -52,14 +53,32 @@ export default function MainContent() {
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           <div className="p-4 border-b border-border">
             <Tabs defaultValue="render" className="w-full">
-              <TabsList className="grid grid-cols-3 w-[300px]">
-                <TabsTrigger value="render">Render</TabsTrigger>
-                <TabsTrigger value="code">Code</TabsTrigger>
-                <TabsTrigger value="spec">Spec</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 border-0 p-1">
+                <TabsTrigger
+                  value="render"
+                  className="flex items-center gap-2"
+                >
+                  <Monitor className="h-4 w-4" />
+                  Render
+                </TabsTrigger>
+                <TabsTrigger
+                  value="code"
+                  className="flex items-center gap-2"
+                >
+                  <Code className="h-4 w-4" />
+                  Code
+                </TabsTrigger>
+                <TabsTrigger
+                  value="spec"
+                  className="flex items-center gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Spec
+                </TabsTrigger>
               </TabsList>
               <div className="overflow-auto h-[calc(100vh-8rem)] mt-4">
                 <TabsContent value="render">
-                  <RenderTab liveParams={liveParams}/>
+                  <RenderTab liveParams={liveParams} />
                 </TabsContent>
                 <TabsContent value="code">
                   <CodeTab />
