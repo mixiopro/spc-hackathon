@@ -25,6 +25,7 @@
     "@revideo/2d": "^0.10.4",
     "@revideo/core": "^0.10.4",
     "@revideo/player-react": "^0.10.4",
+    "@swc/helpers": "^0.5.17",
     "@swc/wasm-web": "^1.11.29",
     "@uiw/codemirror-theme-vscode": "^4.23.12",
     "@uiw/react-codemirror": "^4.23.12",

@@ -30,7 +30,7 @@ Instructions:
 6. Ensure the plan aligns with the template's original purpose and structure where possible, unless the assets clearly necessitate a different approach.
 7. Output *only* the plan as a plain text string. Do not include greetings, explanations, or code snippets in the final plan output.
 """
-REVIDEO_GENERATE_ENDPOINT = "https://aider.mixio.pro/revideo/generate"
+REVIDEO_GENERATE_ENDPOINT = "http://localhost:8000" # "https://aider.mixio.pro/revideo/generate"
 
 
 

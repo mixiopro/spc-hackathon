@@ -56,6 +56,9 @@ importers:
       '@revideo/player-react':
         specifier: ^0.10.4
         version: 0.10.4
+      '@swc/helpers':
+        specifier: ^0.5.17
+        version: 0.5.17
       '@swc/wasm-web':
         specifier: ^1.11.29
         version: 1.11.29
