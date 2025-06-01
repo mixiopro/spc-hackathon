@@ -1,10 +1,10 @@
 "use client";
 
-import { initialState } from "@/constants/initial.state";
+import { initialStarterCode, initialState } from "@/constants/initial.state";
 import { AgentState } from "@/data/interfaces/coagent.interface";
 import { useCoAgent, useCopilotContext } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import AppLayout from "../../../components/v2/app-layout";
 
 export default function CopilotKitPage({
@@ -17,10 +17,10 @@ export default function CopilotKitPage({
   const { state, setState } = useCoAgent<AgentState>({
     name: "sample_agent",
     initialState: {
-      starterCode: "",
       planner_result: {},
       final_result: {},
       ...initialState,
+      starter_code: initialStarterCode,
     },
   });
 
@@ -38,22 +38,18 @@ export default function CopilotKitPage({
       <CopilotSidebar
         clickOutsideToClose={false}
         onSubmitMessage={async (message) => {
-          console.log("🚀 ---------------------🚀");
-          console.log("🚀 ~CopilotKitPage message:", message);
-          console.log("🚀 ~CopilotKitPage state:", {
+          const newFinalState= {
             ...state,
             prompt: message,
-            planner_result: {},
-            final_result: {},
-          });
+            starter_code : state.final_result?.code || initialStarterCode,
+          }
+          console.log("🚀 ---------------------🚀");
+          console.log("🚀 ~CopilotKitPage state-current:", state);
+          console.log("🚀 ~CopilotKitPage message:", message);
+          console.log("🚀 ~CopilotKitPage state-new:", newFinalState);
           console.log("🚀 ---------------------🚀");
           // Reset the state before starting new research
-          setState({
-            ...state,
-            prompt: message,
-            planner_result: {},
-            final_result: {},
-          });
+          setState(newFinalState);
           await new Promise((resolve) => setTimeout(resolve, 30));
         }}
         defaultOpen={true}
